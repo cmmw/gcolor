@@ -1,7 +1,9 @@
+==================================
+
+Algorithm for the n-graphcoloring problem
 
 ==================================
-Algorithm for the n-graphcoloring problem
-==================================
+
 
 Authors:
 Christian Wagner e0725942@student.tuwien.ac.at
