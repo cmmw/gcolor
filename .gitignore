@@ -1,0 +1,16 @@
+*.d
+*.o
+*.aux
+*.out
+*.log
+*.pdf
+.cproject
+.project
+.directory
+*.gch
+gcolor
+gcolor.exe
+/Debug
+*.bbl
+*.blg
+*.gz
