@@ -4,8 +4,9 @@
 #include <cstdio>
 #include <sstream>
 #include "Logger.h"
+#include "Graph.h"
 
-
+using namespace graphcoloring;
 
 int main(int argc, char* argv[])
 {
@@ -80,6 +81,8 @@ int main(int argc, char* argv[])
 
 
 	clock_t begin = clock();
+
+	Graph graph = Graph(instanceFile);
 
 	// TODO: run algorithm here
 

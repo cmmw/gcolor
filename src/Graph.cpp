@@ -1,0 +1,86 @@
+/*
+ * Graph.cpp
+ *
+ *  Created on: Apr 13, 2015
+ *      Author: ixi
+ */
+
+#include "Graph.h"
+#include <iostream>
+#include <fstream>
+#include <sstream>
+#include <cstdlib>
+
+
+namespace graphcoloring {
+
+Graph::Graph() : num_nodes(-1), num_edges(-1) {
+}
+
+Graph::Graph(string fileName) : num_nodes(0), num_edges(0) {
+	ifstream ifs( fileName.c_str() );
+	if( ifs.fail() ) {
+		cerr << "could not open input file " << fileName << "\n";
+		exit( -1 );
+	}
+
+	string line;
+	string garbage;
+	int edgeId = 0;
+
+	cout << "Reading instance from file " << fileName << "\n";
+
+	while (getline(ifs, line)) {
+		istringstream output(line);
+
+
+		switch (line[0]) {
+		case 'c':
+			// comment line, do nothing
+			break;
+		case 'p':
+			// header line
+			output >> garbage >> garbage >> num_nodes >> num_edges;
+
+			incidentEdges.resize( num_nodes );
+			break;
+		case 'e':
+			if (num_nodes == 0) {
+				cout << "Edge line found before header line. Input file invalid?" << endl;
+			}
+			else {
+				// edge line
+				unsigned int v1, v2;
+				output >> garbage >> v1 >> v2;
+				edges.push_back(Edge(v1-1, v2-1));
+
+				incidentEdges[v1-1].push_back( edgeId );
+				incidentEdges[v2-1].push_back( edgeId );
+				edgeId++;
+			}
+			break;
+		default:
+			break;
+		}
+	}
+
+	ifs.close();
+
+	cout << "Number of nodes: " << num_nodes << "\n";
+	cout << "Number of edges: " << num_edges << "\n";
+
+	cout << "Incidency list:" << "\n";
+	for( int v = 0; v < num_nodes; v++ ) {
+		cout << v << ": ";
+		for (list<unsigned int>::iterator it = incidentEdges[v].begin();
+				it != incidentEdges[v].end(); it++) {
+			cout << "(" << edges[*it].getV1() << "," << edges[*it].getV2() << "), ";
+		}
+		cout << "\n";
+	}
+}
+
+Graph::~Graph() {
+}
+
+} /* namespace graphcoloring */
