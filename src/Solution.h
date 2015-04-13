@@ -9,6 +9,9 @@
 #define SRC_SOLUTION_H_
 
 #include <vector>
+#include <string>
+
+#include "Graph.h"
 
 namespace graphcoloring {
 
@@ -29,6 +32,8 @@ public:
 	int getNum_Nodes() const;
 
 	void printSolution() const;
+	void writeGraphVizFile(string fileName, Graph graph) const;
+
 private:
 	vector<int> colors;
 	vector<vector<int> > domainValues;

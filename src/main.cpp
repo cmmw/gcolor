@@ -7,25 +7,29 @@
 #include "Graph.h"
 #include "Solution.h"
 #include "Algorithm.h"
+#include "Constants.h"
 
 using namespace graphcoloring;
+using namespace std;
 
 int main(int argc, char* argv[])
 {
 	srand(time(NULL));
-	if (argc < 3 || argc > 17)
+	if (argc < 5 || argc > 7)
 	{
-		std::cout << "Usage: " << argv[0] << " " << "--instanceFile <file> "
-				<< "--k <number> ]" << std::endl;
+		cout << "Usage: " << argv[0] << " " << "--instanceFile <file> "
+				<< "--k <number> " << "[--graphVizOutFile <file>]" << endl;
 		return -1;
 	}
 
 	// get_opt start
 	int c;
-	std::istringstream arg;
-	std::string instanceFile;
+	istringstream arg;
+	string instanceFile;
 
-	int k;
+	string graphVizOutFile;
+
+	int k = -1;
 
 	while (true)
 	{
@@ -34,6 +38,7 @@ int main(int argc, char* argv[])
 				{
 						{ "instanceFile", required_argument, 0, 'i' },
 						{ "k", required_argument, 0, 'k' },
+						{ "graphVizOutFile", required_argument, 0, 'v' },
 						{ 0, 0, 0, 0 }
 				};
 
@@ -52,14 +57,15 @@ int main(int argc, char* argv[])
 			arg >> k;
 			if (k < 0)
 			{
-				std::cerr << "k must be >= 0" << std::endl;
+				cerr << "k must be >= 0" << endl;
 				return 1;
 			}
 			break;
-
-
+		case 'v':
+			graphVizOutFile = optarg;
+			break;
 		default:
-			std::cerr << "?? getopt returned character code " << std::oct << std::showbase << c << " ??" << std::endl;
+			cerr << "?? getopt returned character code " << oct << showbase << c << " ??" << endl;
 			return 1;
 		}
 	}
@@ -67,7 +73,12 @@ int main(int argc, char* argv[])
 
 	if (instanceFile.empty())
 	{
-		std::cerr << "Argument --instanceFile <file> missing" << std::endl;
+		cerr << "Argument --instanceFile <file> missing" << endl;
+		return 1;
+	}
+
+	if (k == -1) {
+		cerr << "Argument --k <number> missing" << endl;
 		return 1;
 	}
 
@@ -102,6 +113,14 @@ int main(int argc, char* argv[])
 
 	if (finalSolution != NULL) {
 		finalSolution->printSolution();
+
+		if (!graphVizOutFile.empty()) {
+
+			if (k > graphviz_color_count) {
+				cout << "Too many colors, cannot write graphVizFile" << endl;
+			}
+			finalSolution->writeGraphVizFile(graphVizOutFile, graph);
+		}
 	}
 	else {
 		cout << "No valid Solution found!" << endl;

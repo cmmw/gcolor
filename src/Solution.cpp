@@ -8,6 +8,10 @@
 #include "Solution.h"
 #include <iostream>
 
+#include <iostream>
+#include <fstream>
+#include "Constants.h"
+
 namespace graphcoloring {
 
 using namespace std;
@@ -56,6 +60,37 @@ void Solution::printSolution() const {
 	for (int i=0; i<num_nodes; i++) {
 		cout << i << ": " << colors[i] << endl;
 	}
+}
+
+void Solution::writeGraphVizFile(string fileName, Graph graph) const {
+	ofstream outFile(fileName.c_str());
+	  if (outFile.is_open())
+	  {
+		  outFile << "graph G {\n";
+
+		  outFile << "  {\n";
+		  outFile << "    " << graphviz_node_settings << "\n";
+
+		  for (int i=0; i<num_nodes; i++) {
+			  outFile << "    n" << i << " [fillcolor=" << graphviz_colors[colors[i]-1] << "]\n";
+		  }
+
+		  outFile << "  }\n";
+
+
+		  for (int i=0; i<graph.getNum_Edges(); i++) {
+			  outFile << "  n" << graph.getEdge(i).getV1()
+					  << " -- n" << graph.getEdge(i).getV2() << ";\n";
+		  }
+
+		  outFile << "}\n";
+
+		  outFile.close();
+	  }
+	  else {
+		  cout << "Unable to open file for output: " << fileName << endl;
+	  }
+
 }
 
 } /* namespace graphcoloring */
