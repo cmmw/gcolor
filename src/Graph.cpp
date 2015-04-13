@@ -12,7 +12,10 @@
 #include <cstdlib>
 
 
+
 namespace graphcoloring {
+
+using namespace std;
 
 Graph::Graph() : num_nodes(-1), num_edges(-1) {
 }
@@ -81,6 +84,47 @@ Graph::Graph(string fileName) : num_nodes(0), num_edges(0) {
 }
 
 Graph::~Graph() {
+}
+
+
+Edge Graph::getEdge(int edgeId) const {
+	return edges[edgeId];
+}
+
+vector<Edge> Graph::getIncidentEdges(int nodeId) const {
+	vector<Edge> temp;
+
+	for (list<unsigned int>::const_iterator it = incidentEdges[nodeId].begin();
+			it != incidentEdges[nodeId].end(); it++) {
+		temp.push_back(edges[*it]);
+	}
+
+	return temp;
+}
+
+vector<int> Graph::getNeighbours(int nodeId) const {
+	vector<int> neighbours;
+
+	for (list<unsigned int>::const_iterator it = incidentEdges[nodeId].begin();
+			it != incidentEdges[nodeId].end(); it++) {
+
+		if (edges[*it].getV1() == nodeId) {
+			neighbours.push_back(edges[*it].getV2());
+		}
+		else {
+			neighbours.push_back(edges[*it].getV1());
+		}
+	}
+
+
+	return neighbours;
+}
+
+int Graph::getNum_Nodes() const {
+	return num_nodes;
+}
+int Graph::getNum_Edges() const {
+	return num_edges;
 }
 
 } /* namespace graphcoloring */

@@ -15,11 +15,11 @@ public:
 	Edge(int v1, int v2);
 	virtual ~Edge();
 
-	unsigned int getV1() const;
-	unsigned int getV2() const;
+	int getV1() const;
+	int getV2() const;
 
 private:
-	unsigned int v1, v2;
+	int v1, v2;
 };
 
 } /* namespace graphcoloring */

@@ -15,11 +15,11 @@ Edge::Edge(int v1, int v2) : v1(v1), v2(v2) {
 Edge::~Edge() {
 }
 
-unsigned int Edge::getV1() const {
+int Edge::getV1() const {
 	return v1;
 }
 
-unsigned int Edge::getV2() const {
+int Edge::getV2() const {
 	return v2;
 }
 

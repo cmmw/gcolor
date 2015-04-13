@@ -5,6 +5,8 @@
 #include <sstream>
 #include "Logger.h"
 #include "Graph.h"
+#include "Solution.h"
+#include "Algorithm.h"
 
 using namespace graphcoloring;
 
@@ -20,7 +22,6 @@ int main(int argc, char* argv[])
 
 	// get_opt start
 	int c;
-	int algo = 0;
 	std::istringstream arg;
 	std::string instanceFile;
 
@@ -84,7 +85,12 @@ int main(int argc, char* argv[])
 
 	Graph graph = Graph(instanceFile);
 
-	// TODO: run algorithm here
+	Solution* initialSolution = new Solution(graph.getNum_Nodes(), k);
+
+	Algorithm algorithm;
+
+	Solution* finalSolution = algorithm.backtrack(initialSolution, graph);
+
 
 	clock_t end = clock();
 
@@ -93,7 +99,16 @@ int main(int argc, char* argv[])
 	double ms = double(end - begin) / CLOCKS_PER_SEC;
 	LOG << "Took " << ms << " seconds";
 
-	// official output comes here
+
+	if (finalSolution != NULL) {
+		finalSolution->printSolution();
+	}
+	else {
+		cout << "No valid Solution found!" << endl;
+	}
+
+	delete initialSolution;
+	delete finalSolution;
 
 	return 0;
 }

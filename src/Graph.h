@@ -23,8 +23,12 @@ public:
 	Graph(string fileName);
 	virtual ~Graph();
 
+	Edge getEdge(int edgeId) const;
+	vector<Edge> getIncidentEdges(int nodeId) const;
+	vector<int> getNeighbours(int nodeId) const;
 
-
+	int getNum_Nodes() const;
+	int getNum_Edges() const;
 private:
 	int num_nodes;
 	int num_edges;
