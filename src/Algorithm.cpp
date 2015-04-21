@@ -17,6 +17,25 @@ Algorithm::Algorithm() {
 Algorithm::~Algorithm() {
 }
 
+// Repeatedly launch backtracking to find solution with minimum k
+Solution* Algorithm::findOptimalSolution(Graph& graph) {
+	int k = 1;
+	bool solutionFound = false;
+	Solution* solution;
+	while (!solutionFound) {
+		solution = backtrack(new Solution(graph.getNum_Nodes(), k), graph);
+
+		if (solution != NULL) {
+			solutionFound = true;
+			return solution;
+		}
+		else {
+			k++;
+		}
+	}
+	// should never be reached
+	return NULL;
+}
 
 
 // Backtracking algorithm as described in the Book:
@@ -45,11 +64,12 @@ Solution* Algorithm::backtrack(Solution* solution, Graph& graph) {
 
 
 			if (inferences(newSolution, graph)) {
-				newSolution = backtrack(newSolution, graph);
+				Solution* backtrackSolution;
+				backtrackSolution = backtrack(newSolution, graph);
 
-				if (newSolution != NULL) {
+				if (backtrackSolution != NULL) {
 					delete solution;
-					return newSolution;
+					return backtrackSolution;
 				}
 			}
 

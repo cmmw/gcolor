@@ -18,6 +18,8 @@ public:
 	Algorithm();
 	virtual ~Algorithm();
 
+	Solution* findOptimalSolution(Graph& graph);
+
 	Solution* backtrack(Solution* solution, Graph& graph);
 
 	int selectUnassignedNode(Solution* solution, Graph& graph);

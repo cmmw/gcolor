@@ -25,7 +25,7 @@ public:
 	int getColor(int nodeId) const;
 	void setColor(int nodeId, int color);
 
-	vector<int> getDomainValues(int nodeId) const;
+	vector<int> getDomainValues(int nodeId);
 	void setDomainValues(int nodeId, vector<int> values);
 
 	int getK() const;

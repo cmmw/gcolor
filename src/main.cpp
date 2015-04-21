@@ -15,7 +15,7 @@ using namespace std;
 int main(int argc, char* argv[])
 {
 	srand(time(NULL));
-	if (argc < 5 || argc > 7)
+	if (argc < 3 || argc > 7)
 	{
 		cout << "Usage: " << argv[0] << " " << "--instanceFile <file> "
 				<< "--k <number> " << "[--graphVizOutFile <file>]" << endl;
@@ -77,10 +77,6 @@ int main(int argc, char* argv[])
 		return 1;
 	}
 
-	if (k == -1) {
-		cerr << "Argument --k <number> missing" << endl;
-		return 1;
-	}
 
 	if (optind < argc)
 	{
@@ -96,12 +92,15 @@ int main(int argc, char* argv[])
 
 	Graph graph = Graph(instanceFile);
 
-	Solution* initialSolution = new Solution(graph.getNum_Nodes(), k);
-
 	Algorithm algorithm;
-
-	Solution* finalSolution = algorithm.backtrack(initialSolution, graph);
-
+	Solution* finalSolution;
+	if (k == -1) {
+		finalSolution = algorithm.findOptimalSolution(graph);
+	}
+	else {
+		Solution* initialSolution = new Solution(graph.getNum_Nodes(), k);
+		finalSolution = algorithm.backtrack(initialSolution, graph);
+	}
 
 	clock_t end = clock();
 
