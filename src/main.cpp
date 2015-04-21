@@ -126,7 +126,6 @@ int main(int argc, char* argv[])
 		cout << "No valid Solution found!" << endl;
 	}
 
-	delete initialSolution;
 	delete finalSolution;
 
 	return 0;

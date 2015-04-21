@@ -48,6 +48,7 @@ Solution* Algorithm::backtrack(Solution* solution, Graph& graph) {
 				newSolution = backtrack(newSolution, graph);
 
 				if (newSolution != NULL) {
+					delete solution;
 					return newSolution;
 				}
 			}
