@@ -24,6 +24,8 @@ public:
 
 	int selectUnassignedNode(Solution* solution, Graph& graph);
 
+	int getUnassignedNeighbours(Solution* solution, const Graph& graph, int node);
+
 	bool inferences(Solution* solution, Graph& graph, int lastSetNodeId);
 
 	vector<int> orderColors(int nodeId, Solution* solution, Graph& graph);

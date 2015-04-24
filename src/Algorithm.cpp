@@ -6,6 +6,7 @@
  */
 
 #include "Algorithm.h"
+#include "Logger.h"
 
 #include <algorithm>
 
@@ -23,6 +24,7 @@ Solution* Algorithm::findOptimalSolution(Graph& graph) {
 	bool solutionFound = false;
 	Solution* solution;
 	while (!solutionFound) {
+		LOG << "Trying with k = " << k;
 		solution = backtrack(new Solution(graph.getNum_Nodes(), k), graph);
 
 		if (solution != NULL) {
@@ -74,19 +76,60 @@ Solution* Algorithm::backtrack(Solution* solution, Graph& graph) {
 
 }
 
-int Algorithm::selectUnassignedNode(Solution* solution, Graph& graph) {
-	// TODO: implement Variable Selection Heuristic here
-
-
-	// just return the next node which is not set yet
-	for (int i=0; i<solution->getNum_Nodes(); i++) {
-		if (solution->getColor(i) == -1) {
-			return i;
+int Algorithm::selectUnassignedNode(Solution* solution, Graph& graph)
+{
+	//Variable Selection Heuristic: minimum remaining values (MRV)
+	int node = -1;
+	int remainingValues = -1;
+	int unassignedNeighbors = -1;
+	for (int i = 0; i < solution->getNum_Nodes(); i++)
+	{
+		if (solution->getColor(i) == -1)
+		{
+			if (node == -1)
+			{
+				node = i;
+				remainingValues = solution->getDomainValues(i).size();
+			} else
+			{
+				int tmp = solution->getDomainValues(i).size();
+				if (remainingValues > tmp)
+				{
+					node = i;
+					remainingValues = tmp;
+				} else if (remainingValues == tmp)	//Tie-breaking: degree heuristic. Choose variable which is involved in more constraints (has more unassigned neighbours)
+				{
+					if(unassignedNeighbors == -1)
+						unassignedNeighbors = getUnassignedNeighbours(solution,graph,node);
+					int tmp = getUnassignedNeighbours(solution, graph, i);
+					if(tmp > unassignedNeighbors)
+					{
+						unassignedNeighbors = tmp;
+						node = i;
+					}
+				}
+			}
 		}
 	}
 
-	// return -1 if all nodes are set already
-	return -1;
+//	for (int i = 0; i < solution->getNum_Nodes(); i++)
+//	{
+//		if(solution->getColor(i) == -1)
+//			return i;
+//	}
+	return node;
+}
+
+int Algorithm::getUnassignedNeighbours(Solution* solution, const Graph& graph, int node)
+{
+	vector<int> neighbours = graph.getNeighbours(node);
+	int count = 0;
+	for (vector<int>::iterator it = neighbours.begin(); it != neighbours.end(); it++)
+	{
+		if (solution->getColor(*it) == -1)
+			count++;
+	}
+	return count;
 }
 
 bool Algorithm::inferences(Solution* solution, Graph& graph, int lastSetNodeId) {
