@@ -33,6 +33,10 @@ public:
 	bool assignmentIsConsistent(int nodeId, int color, Solution* solution, Graph& graph);
 
 	bool simpleForwardChecking(Solution* solution, Graph& graph, int lastSetNodeId);
+
+	bool maintainingArcConsistency(Solution* solution, Graph& graph, int lastSetNodeId);
+
+	bool revise(Solution* solution, Graph& graph, int nodeId1, int nodeId2);
 };
 
 } /* namespace graphcoloring */

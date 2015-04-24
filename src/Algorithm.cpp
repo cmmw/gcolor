@@ -133,7 +133,8 @@ int Algorithm::getUnassignedNeighbours(Solution* solution, const Graph& graph, i
 }
 
 bool Algorithm::inferences(Solution* solution, Graph& graph, int lastSetNodeId) {
-	return simpleForwardChecking(solution, graph, lastSetNodeId);
+	return maintainingArcConsistency(solution, graph, lastSetNodeId);
+	//return simpleForwardChecking(solution, graph, lastSetNodeId);
 }
 
 bool Algorithm::simpleForwardChecking(Solution* solution, Graph& graph, int lastSetNodeId) {
@@ -155,6 +156,89 @@ bool Algorithm::simpleForwardChecking(Solution* solution, Graph& graph, int last
 
 	return true;
 }
+
+bool Algorithm::maintainingArcConsistency(Solution* solution, Graph& graph, int lastSetNodeId) {
+	list<Edge> edges;
+	vector<Edge> incidentEdges = graph.getIncidentEdges(lastSetNodeId);
+
+	for (vector<Edge>::iterator it = incidentEdges.begin(); it != incidentEdges.end(); it++) {
+		if (solution->getColor(it->getV1()) != -1 || solution->getColor(it->getV2()) != -1) {
+			if (it->getV1() == lastSetNodeId) {
+				edges.push_back(Edge(it->getV2(), it->getV1()));
+			}
+			else {
+				edges.push_back(Edge(it->getV1(), it->getV2()));
+			}
+		}
+	}
+
+	for (list<Edge>::iterator it = edges.begin(); it != edges.end(); it++) {
+		if (revise(solution, graph, it->getV1(), it->getV2())) {
+			if (solution->getDomainValues(it->getV1()).size() == 0) {
+				return false;
+			}
+
+
+			incidentEdges = graph.getIncidentEdges(it->getV1());
+
+			for (vector<Edge>::iterator it2 = incidentEdges.begin(); it2 != incidentEdges.end(); it2++) {
+				if (it2->getV1() != it->getV2() && it2->getV2() != it->getV2()
+						&& (solution->getColor(it2->getV1()) != -1 || solution->getColor(it2->getV2()) != -1)) {
+					if (it2->getV1() == it->getV1()) {
+						edges.push_back(Edge(it2->getV2(), it2->getV1()));
+					}
+					else {
+						edges.push_back(Edge(it2->getV1(), it2->getV2()));
+					}
+				}
+			}
+		}
+	}
+
+	return true;
+}
+
+bool Algorithm::revise(Solution* solution, Graph& graph, int nodeId1, int nodeId2) {
+	bool revised = false;
+
+	vector<int> oldDomainValues1;
+
+	if (solution->getColor(nodeId1) != -1) {
+		oldDomainValues1.push_back(solution->getColor(nodeId1));
+	}
+	else {
+		oldDomainValues1 = solution->getDomainValues(nodeId1);
+	}
+	list<int> domainValues1(oldDomainValues1.begin(), oldDomainValues1.end() );
+
+
+
+	vector<int> domainValues2;
+
+	if (solution->getColor(nodeId2) != -1) {
+		domainValues2.push_back(solution->getColor(nodeId2));
+	}
+	else {
+		domainValues2 = solution->getDomainValues(nodeId2);
+	}
+
+	for (list<int>::iterator it = domainValues1.begin(); it != domainValues1.end();) {
+		if (domainValues2.size() == 1 && *it == domainValues2.front()) {
+			it = domainValues1.erase(it);
+			revised = true;
+		}
+		else {
+			it++;
+		}
+	}
+
+	vector<int> newDomainValues1( domainValues1.begin(), domainValues1.end() );
+	solution->setDomainValues(nodeId1, newDomainValues1);
+
+	return revised;
+}
+
+
 
 vector<int> Algorithm::orderColors(int nodeId, Solution* solution, Graph& graph) {
 	// TODO: implement Value Selection Heuristic here
