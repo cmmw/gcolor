@@ -31,26 +31,12 @@ private:
 
 	vector<int> orderColors(int nodeId, Solution* solution, Graph& graph);
 
+	int countOccurrence(int col, const Graph& graph, Solution* solution, int nodeId);
+
 	bool assignmentIsConsistent(int nodeId, int color, Solution* solution, Graph& graph);
 
 	bool simpleForwardChecking(Solution* solution, Graph& graph, int lastSetNodeId);
 
-	class ValueOrder
-	{
-
-	public:
-		ValueOrder(Solution* solution, const Graph& graph, int nodeId) : solution(solution), graph(graph), nodeId(nodeId)
-		{
-		}
-
-		bool operator()(int col1, int col2);
-
-	private:
-		Solution* solution;
-		const Graph graph;
-		int nodeId;
-
-	};
 };
 
 } /* namespace graphcoloring */
