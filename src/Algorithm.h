@@ -24,12 +24,13 @@ public:
 
 	int selectUnassignedNode(Solution* solution, Graph& graph);
 
-	bool inferences(Solution* solution, Graph& graph);
+	bool inferences(Solution* solution, Graph& graph, int lastSetNodeId);
 
 	vector<int> orderColors(int nodeId, Solution* solution, Graph& graph);
 
 	bool assignmentIsConsistent(int nodeId, int color, Solution* solution, Graph& graph);
 
+	bool simpleForwardChecking(Solution* solution, Graph& graph, int lastSetNodeId);
 };
 
 } /* namespace graphcoloring */

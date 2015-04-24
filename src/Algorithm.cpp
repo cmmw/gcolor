@@ -63,7 +63,7 @@ Solution* Algorithm::backtrack(Solution* solution, Graph& graph) {
 			newSolution->setDomainValues(nodeId, newDomainValues);
 
 
-			if (inferences(newSolution, graph)) {
+			if (inferences(newSolution, graph, nodeId)) {
 				Solution* backtrackSolution;
 				backtrackSolution = backtrack(newSolution, graph);
 
@@ -95,8 +95,27 @@ int Algorithm::selectUnassignedNode(Solution* solution, Graph& graph) {
 	return -1;
 }
 
-bool Algorithm::inferences(Solution* solution, Graph& graph) {
-	// TODO: implement Constraint Propagation here
+bool Algorithm::inferences(Solution* solution, Graph& graph, int lastSetNodeId) {
+	return simpleForwardChecking(solution, graph, lastSetNodeId);
+}
+
+bool Algorithm::simpleForwardChecking(Solution* solution, Graph& graph, int lastSetNodeId) {
+	int color = solution->getColor(lastSetNodeId);
+	vector<int> neighbours = graph.getNeighbours(lastSetNodeId);
+	for (vector<int>::iterator it = neighbours.begin(); it != neighbours.end(); it++) {
+		if (solution->getColor(*it) == -1) {
+			vector<int> domainValues = solution->getDomainValues(*it);
+			domainValues.erase( std::remove( domainValues.begin(), domainValues.end(), color ), domainValues.end() );
+
+			if (domainValues.size() == 0) {
+				return false;
+			}
+			else {
+				solution->setDomainValues(*it, domainValues);
+			}
+		}
+	}
+
 	return true;
 }
 
