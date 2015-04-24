@@ -10,6 +10,8 @@
 
 #include <algorithm>
 
+extern int visitedNodes;
+
 namespace graphcoloring {
 
 Algorithm::Algorithm() {
@@ -44,7 +46,7 @@ Solution* Algorithm::findOptimalSolution(Graph& graph) {
 // "Artificial Intelligence: A Modern Approach" by Stuart Russel and Peter Norvig
 Solution* Algorithm::backtrack(Solution* solution, Graph& graph) {
 	int nodeId = selectUnassignedNode(solution, graph);
-
+	visitedNodes++;
 	if (nodeId == -1) {
 		// all nodes are colored, return solution
 		return solution;
@@ -156,11 +158,16 @@ bool Algorithm::simpleForwardChecking(Solution* solution, Graph& graph, int last
 	return true;
 }
 
-vector<int> Algorithm::orderColors(int nodeId, Solution* solution, Graph& graph) {
-	// TODO: implement Value Selection Heuristic here
+vector<int> Algorithm::orderColors(int nodeId, Solution* solution, Graph& graph)
+{
+	//Value Selection Heuristic: least-constraining-value (value that rules out the fewest choices for the neighbours)
+	std::vector<int> orderedValues;
+	ValueOrder valOrder(solution, graph, nodeId);
+	orderedValues = solution->getDomainValues(nodeId);
+	std::sort(orderedValues.begin(), orderedValues.end(), valOrder);
+	return orderedValues;
 
-	// just return domainValues in standard order
-	return solution->getDomainValues(nodeId);
+//	return solution->getDomainValues(nodeId);
 }
 
 bool Algorithm::assignmentIsConsistent(int nodeId, int color, Solution* solution, Graph& graph) {
@@ -175,5 +182,20 @@ bool Algorithm::assignmentIsConsistent(int nodeId, int color, Solution* solution
 	return true;
 }
 
+
+bool Algorithm::ValueOrder::operator()(int col1, int col2)
+{
+	int count_col1 = 0, count_col2 = 0;
+	vector<int> neighbours = graph.getNeighbours(nodeId);
+	for (vector<int>::iterator it = neighbours.begin(); it != neighbours.end(); it++)
+	{
+		std::vector<int> domain = solution->getDomainValues(*it);
+		if(std::find(domain.begin(), domain.end(), col1) != domain.end())
+			count_col1++;
+		if(std::find(domain.begin(), domain.end(), col2) != domain.end())
+			count_col2++;
+	}
+	return count_col1 < count_col2;
+}
 
 } /* namespace graphcoloring */

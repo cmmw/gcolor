@@ -22,6 +22,7 @@ public:
 
 	Solution* backtrack(Solution* solution, Graph& graph);
 
+private:
 	int selectUnassignedNode(Solution* solution, Graph& graph);
 
 	int getUnassignedNeighbours(Solution* solution, const Graph& graph, int node);
@@ -33,6 +34,23 @@ public:
 	bool assignmentIsConsistent(int nodeId, int color, Solution* solution, Graph& graph);
 
 	bool simpleForwardChecking(Solution* solution, Graph& graph, int lastSetNodeId);
+
+	class ValueOrder
+	{
+
+	public:
+		ValueOrder(Solution* solution, const Graph& graph, int nodeId) : solution(solution), graph(graph), nodeId(nodeId)
+		{
+		}
+
+		bool operator()(int col1, int col2);
+
+	private:
+		Solution* solution;
+		const Graph graph;
+		int nodeId;
+
+	};
 };
 
 } /* namespace graphcoloring */
