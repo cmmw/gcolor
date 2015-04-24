@@ -237,14 +237,59 @@ bool Algorithm::revise(Solution* solution, Graph& graph, int nodeId1, int nodeId
 vector<int> Algorithm::orderColors(int nodeId, Solution* solution, Graph& graph)
 {
 	//Value Selection Heuristic: least-constraining-value (value that rules out the fewest choices for the neighbours)
+
 //	std::vector<int> orderedValues;
 //	ValueOrder valOrder(solution, graph, nodeId);
 //	orderedValues = solution->getDomainValues(nodeId);
 //	std::sort(orderedValues.begin(), orderedValues.end(), valOrder);
 //	return orderedValues;
 
-	return solution->getDomainValues(nodeId);
+	std::vector<int> orderedValues;
+
+	std::list<int> colors;
+	std::list<int> values;
+
+	for (int i = 1; i <= solution->getK(); i++)
+	{
+		int value = countOccurrence(i, graph, solution, nodeId);
+		int pos = 0;
+		for (std::list<int>::iterator it = values.begin(); it != values.end(); it++)
+		{
+			if (value < *it)
+				break;
+			pos++;
+		}
+		std::list<int>::iterator valIt = values.begin();
+		std::list<int>::iterator colIt = colors.begin();
+		std::advance(valIt, pos);
+		std::advance(colIt, pos);
+		values.insert(valIt, value);
+		colors.insert(colIt, i);
+	}
+
+	orderedValues = std::vector<int>(colors.begin(), colors.end());
+	return orderedValues;
+
+	//return solution->getDomainValues(nodeId);
 }
+
+
+int Algorithm::countOccurrence(int col, const Graph& graph, Solution* solution, int nodeId)
+{
+	vector<int> neighbours = graph.getNeighbours(nodeId);
+	int count = 0;
+	for (vector<int>::iterator it = neighbours.begin(); it != neighbours.end(); it++)
+	{
+		if (solution->getColor(*it) != -1)
+			continue;
+
+		std::vector<int> domain = solution->getDomainValues(*it);
+		if (std::find(domain.begin(), domain.end(), col) != domain.end())
+			count++;
+	}
+	return count;
+}
+
 
 bool Algorithm::assignmentIsConsistent(int nodeId, int color, Solution* solution, Graph& graph) {
 	// just check if the newly assigned variable causes any inconsistencies to previously set colors
@@ -256,22 +301,6 @@ bool Algorithm::assignmentIsConsistent(int nodeId, int color, Solution* solution
 	}
 
 	return true;
-}
-
-
-bool Algorithm::ValueOrder::operator()(int col1, int col2)
-{
-	int count_col1 = 0, count_col2 = 0;
-	vector<int> neighbours = graph.getNeighbours(nodeId);
-	for (vector<int>::iterator it = neighbours.begin(); it != neighbours.end(); it++)
-	{
-		std::vector<int> domain = solution->getDomainValues(*it);
-		if(std::find(domain.begin(), domain.end(), col1) != domain.end())
-			count_col1++;
-		if(std::find(domain.begin(), domain.end(), col2) != domain.end())
-			count_col2++;
-	}
-	return count_col1 < count_col2;
 }
 
 } /* namespace graphcoloring */

@@ -31,6 +31,8 @@ private:
 
 	vector<int> orderColors(int nodeId, Solution* solution, Graph& graph);
 
+	int countOccurrence(int col, const Graph& graph, Solution* solution, int nodeId);
+
 	bool assignmentIsConsistent(int nodeId, int color, Solution* solution, Graph& graph);
 
 	bool simpleForwardChecking(Solution* solution, Graph& graph, int lastSetNodeId);
