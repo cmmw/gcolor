@@ -57,12 +57,6 @@ Solution* Algorithm::backtrack(Solution* solution, Graph& graph) {
 			Solution* newSolution = new Solution(*solution);
 			newSolution->setColor(nodeId, color);
 
-			vector<int> newDomainValues = domainValues;
-			// remove the tried color from the domain values
-			newDomainValues.erase(remove(newDomainValues.begin(), newDomainValues.end(), color), newDomainValues.end());
-			newSolution->setDomainValues(nodeId, newDomainValues);
-
-
 			if (inferences(newSolution, graph, nodeId)) {
 				Solution* backtrackSolution;
 				backtrackSolution = backtrack(newSolution, graph);
