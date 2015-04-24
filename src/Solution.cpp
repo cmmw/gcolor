@@ -67,7 +67,6 @@ void Solution::printSolution() const {
 	for (int i=0; i<num_nodes; i++) {
 		cout << i << ": " << colors[i] << endl;
 	}
-	cout << "Visited nodes: " << visitedNodes << std::endl;
 }
 
 void Solution::writeGraphVizFile(string fileName, Graph graph) const {
