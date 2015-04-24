@@ -8,6 +8,7 @@
 #include "Solution.h"
 #include "Algorithm.h"
 #include "Constants.h"
+#include "time.h"
 
 using namespace graphcoloring;
 using namespace std;
