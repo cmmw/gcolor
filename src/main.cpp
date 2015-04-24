@@ -13,6 +13,8 @@
 using namespace graphcoloring;
 using namespace std;
 
+int visitedNodes = 0;
+
 int main(int argc, char* argv[])
 {
 	srand(time(NULL));
@@ -109,7 +111,7 @@ int main(int argc, char* argv[])
 
 	double ms = double(end - begin) / CLOCKS_PER_SEC;
 	LOG << "Took " << ms << " seconds";
-
+	LOG << "Visited " << visitedNodes << " nodes";
 
 	if (finalSolution != NULL) {
 		finalSolution->printSolution();
