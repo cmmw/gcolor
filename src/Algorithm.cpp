@@ -80,6 +80,22 @@ Solution* Algorithm::backtrack(Solution* solution, Graph& graph) {
 
 int Algorithm::selectUnassignedNode(Solution* solution, Graph& graph)
 {
+	return MRV(solution, graph);
+//	return simpleSelectionHeuristic(solution, graph);
+}
+
+int Algorithm::simpleSelectionHeuristic(Solution* solution, const Graph& graph)
+{
+	for (int i = 0; i < solution->getNum_Nodes(); i++)
+	{
+		if (solution->getColor(i) == -1)
+			return i;
+	}
+	return -1;
+}
+
+int Algorithm::MRV(Solution* solution, const Graph& graph)
+{
 	//Variable Selection Heuristic: minimum remaining values (MRV)
 	int node = -1;
 	int remainingValues = -1;
@@ -101,10 +117,10 @@ int Algorithm::selectUnassignedNode(Solution* solution, Graph& graph)
 					remainingValues = tmp;
 				} else if (remainingValues == tmp)	//Tie-breaking: degree heuristic. Choose variable which is involved in more constraints (has more unassigned neighbours)
 				{
-					if(unassignedNeighbors == -1)
-						unassignedNeighbors = getUnassignedNeighbours(solution,graph,node);
+					if (unassignedNeighbors == -1)
+						unassignedNeighbors = getUnassignedNeighbours(solution, graph, node);
 					int tmp = getUnassignedNeighbours(solution, graph, i);
-					if(tmp > unassignedNeighbors)
+					if (tmp > unassignedNeighbors)
 					{
 						unassignedNeighbors = tmp;
 						node = i;
@@ -113,12 +129,6 @@ int Algorithm::selectUnassignedNode(Solution* solution, Graph& graph)
 			}
 		}
 	}
-
-//	for (int i = 0; i < solution->getNum_Nodes(); i++)
-//	{
-//		if(solution->getColor(i) == -1)
-//			return i;
-//	}
 	return node;
 }
 
@@ -236,14 +246,13 @@ bool Algorithm::revise(Solution* solution, Graph& graph, int nodeId1, int nodeId
 
 vector<int> Algorithm::orderColors(int nodeId, Solution* solution, Graph& graph)
 {
+	return leastConstrainingValue(nodeId, solution, graph);
+//	return simpleValueOrdering(nodeId, solution, graph);
+}
+
+vector<int> Algorithm::leastConstrainingValue(int nodeId, Solution* solution, Graph& graph)
+{
 	//Value Selection Heuristic: least-constraining-value (value that rules out the fewest choices for the neighbours)
-
-//	std::vector<int> orderedValues;
-//	ValueOrder valOrder(solution, graph, nodeId);
-//	orderedValues = solution->getDomainValues(nodeId);
-//	std::sort(orderedValues.begin(), orderedValues.end(), valOrder);
-//	return orderedValues;
-
 	std::vector<int> orderedValues;
 
 	std::list<int> colors;
@@ -269,10 +278,12 @@ vector<int> Algorithm::orderColors(int nodeId, Solution* solution, Graph& graph)
 
 	orderedValues = std::vector<int>(colors.begin(), colors.end());
 	return orderedValues;
-
-	//return solution->getDomainValues(nodeId);
 }
 
+vector<int> Algorithm::simpleValueOrdering(int nodeId, Solution* solution, Graph& graph)
+{
+	return solution->getDomainValues(nodeId);
+}
 
 int Algorithm::countOccurrence(int col, const Graph& graph, Solution* solution, int nodeId)
 {

@@ -25,11 +25,19 @@ public:
 private:
 	int selectUnassignedNode(Solution* solution, Graph& graph);
 
+	int simpleSelectionHeuristic(Solution* solution, const Graph& graph);
+
+	int MRV(Solution* solution, const Graph& graph);
+
 	int getUnassignedNeighbours(Solution* solution, const Graph& graph, int node);
 
 	bool inferences(Solution* solution, Graph& graph, int lastSetNodeId);
 
 	vector<int> orderColors(int nodeId, Solution* solution, Graph& graph);
+
+	vector<int> leastConstrainingValue(int nodeId, Solution* solution, Graph& graph);
+
+	vector<int> simpleValueOrdering(int nodeId, Solution* solution, Graph& graph);
 
 	int countOccurrence(int col, const Graph& graph, Solution* solution, int nodeId);
 
