@@ -19,10 +19,15 @@ namespace graphcoloring {
 using namespace std;
 
 Solution::Solution(int num_nodes, int k) : colors(num_nodes, -1), k(k),  num_nodes(num_nodes) {
-	vector<int> vec;
 
-	// initialize domainValues for each node with empty vector
+	// initialize domainValues for each node with full color vector
 	for (int i=0; i<num_nodes; i++) {
+		vector<int> vec;
+
+		for (int j=1; j<=k; j++) {
+			vec.push_back(j);
+		}
+
 		domainValues.push_back(vec);
 	}
 }
@@ -39,14 +44,6 @@ void Solution::setColor(int nodeId, int color) {
 }
 
 vector<int> Solution::getDomainValues(int nodeId) {
-
-	// If domainValues for a certain node are called the first time, the vector gets initialized
-	if (domainValues[nodeId].size() == 0)  {
-		for (int i=1; i<=k; i++) {
-			domainValues[nodeId].push_back(i);
-		}
-	}
-
 	return domainValues[nodeId];
 }
 

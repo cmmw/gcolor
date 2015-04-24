@@ -22,7 +22,7 @@ Algorithm::~Algorithm() {
 
 // Repeatedly launch backtracking to find solution with minimum k
 Solution* Algorithm::findOptimalSolution(Graph& graph) {
-	int k = 1;
+	int k = 2;
 	bool solutionFound = false;
 	Solution* solution;
 	while (!solutionFound) {
@@ -180,7 +180,6 @@ bool Algorithm::maintainingArcConsistency(Solution* solution, Graph& graph, int 
 				return false;
 			}
 
-
 			incidentEdges = graph.getIncidentEdges(it->getV1());
 
 			for (vector<Edge>::iterator it2 = incidentEdges.begin(); it2 != incidentEdges.end(); it2++) {
@@ -203,17 +202,9 @@ bool Algorithm::maintainingArcConsistency(Solution* solution, Graph& graph, int 
 bool Algorithm::revise(Solution* solution, Graph& graph, int nodeId1, int nodeId2) {
 	bool revised = false;
 
-	vector<int> oldDomainValues1;
+	vector<int> oldDomainValues1 = solution->getDomainValues(nodeId1);
 
-	if (solution->getColor(nodeId1) != -1) {
-		oldDomainValues1.push_back(solution->getColor(nodeId1));
-	}
-	else {
-		oldDomainValues1 = solution->getDomainValues(nodeId1);
-	}
 	list<int> domainValues1(oldDomainValues1.begin(), oldDomainValues1.end() );
-
-
 
 	vector<int> domainValues2;
 
@@ -235,7 +226,9 @@ bool Algorithm::revise(Solution* solution, Graph& graph, int nodeId1, int nodeId
 	}
 
 	vector<int> newDomainValues1( domainValues1.begin(), domainValues1.end() );
+
 	solution->setDomainValues(nodeId1, newDomainValues1);
+
 
 	return revised;
 }
@@ -244,13 +237,13 @@ bool Algorithm::revise(Solution* solution, Graph& graph, int nodeId1, int nodeId
 vector<int> Algorithm::orderColors(int nodeId, Solution* solution, Graph& graph)
 {
 	//Value Selection Heuristic: least-constraining-value (value that rules out the fewest choices for the neighbours)
-	std::vector<int> orderedValues;
-	ValueOrder valOrder(solution, graph, nodeId);
-	orderedValues = solution->getDomainValues(nodeId);
-	std::sort(orderedValues.begin(), orderedValues.end(), valOrder);
-	return orderedValues;
+//	std::vector<int> orderedValues;
+//	ValueOrder valOrder(solution, graph, nodeId);
+//	orderedValues = solution->getDomainValues(nodeId);
+//	std::sort(orderedValues.begin(), orderedValues.end(), valOrder);
+//	return orderedValues;
 
-//	return solution->getDomainValues(nodeId);
+	return solution->getDomainValues(nodeId);
 }
 
 bool Algorithm::assignmentIsConsistent(int nodeId, int color, Solution* solution, Graph& graph) {
