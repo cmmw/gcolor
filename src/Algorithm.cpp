@@ -194,7 +194,7 @@ bool Algorithm::maintainingArcConsistency(Solution* solution, Graph& graph, int 
 
 			for (vector<Edge>::iterator it2 = incidentEdges.begin(); it2 != incidentEdges.end(); it2++) {
 				if (it2->getV1() != it->getV2() && it2->getV2() != it->getV2()
-						&& (solution->getColor(it2->getV1()) != -1 || solution->getColor(it2->getV2()) != -1)) {
+						&& (solution->getColor(it2->getV1()) == -1 || solution->getColor(it2->getV2()) == -1)) {
 					if (it2->getV1() == it->getV1()) {
 						edges.push_back(Edge(it2->getV2(), it2->getV1()));
 					}
@@ -238,7 +238,6 @@ bool Algorithm::revise(Solution* solution, Graph& graph, int nodeId1, int nodeId
 	vector<int> newDomainValues1( domainValues1.begin(), domainValues1.end() );
 
 	solution->setDomainValues(nodeId1, newDomainValues1);
-
 
 	return revised;
 }
