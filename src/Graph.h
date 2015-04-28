@@ -34,7 +34,7 @@ private:
 	int num_edges;
 
 	vector<Edge> edges;
-	vector<list<unsigned int> > incidentEdges;
+	vector<vector<unsigned int> > incidentEdges;
 };
 
 } /* namespace graphcoloring */

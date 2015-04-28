@@ -149,8 +149,8 @@ int Algorithm::getUnassignedNeighbours(Solution* solution, const Graph& graph, i
 }
 
 bool Algorithm::inferences(Solution* solution, Graph& graph, int lastSetNodeId) {
-	//return maintainingArcConsistency(solution, graph, lastSetNodeId);
-	return simpleForwardChecking(solution, graph, lastSetNodeId);
+	return maintainingArcConsistency(solution, graph, lastSetNodeId);
+	//return simpleForwardChecking(solution, graph, lastSetNodeId);
 }
 
 bool Algorithm::simpleForwardChecking(Solution* solution, Graph& graph, int lastSetNodeId) {
@@ -221,7 +221,6 @@ bool Algorithm::revise(Solution* solution, Graph& graph, int nodeId1, int nodeId
 	list<int> domainValues1(oldDomainValues1.begin(), oldDomainValues1.end() );
 
 	vector<int> domainValues2;
-
 	if (solution->getColor(nodeId2) != -1) {
 		domainValues2.push_back(solution->getColor(nodeId2));
 	}

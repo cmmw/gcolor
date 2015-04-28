@@ -75,7 +75,7 @@ Graph::Graph(string fileName) : num_nodes(0), num_edges(0) {
 	cout << "Incidency list:" << "\n";
 	for( int v = 0; v < num_nodes; v++ ) {
 		cout << v << ": ";
-		for (list<unsigned int>::iterator it = incidentEdges[v].begin();
+		for (vector<unsigned int>::iterator it = incidentEdges[v].begin();
 				it != incidentEdges[v].end(); it++) {
 			cout << "(" << edges[*it].getV1() << "," << edges[*it].getV2() << "), ";
 		}
@@ -94,7 +94,7 @@ Edge Graph::getEdge(int edgeId) const {
 vector<Edge> Graph::getIncidentEdges(int nodeId) const {
 	vector<Edge> temp;
 
-	for (list<unsigned int>::const_iterator it = incidentEdges[nodeId].begin();
+	for (vector<unsigned int>::const_iterator it = incidentEdges[nodeId].begin();
 			it != incidentEdges[nodeId].end(); it++) {
 		temp.push_back(edges[*it]);
 	}
@@ -105,7 +105,7 @@ vector<Edge> Graph::getIncidentEdges(int nodeId) const {
 vector<int> Graph::getNeighbours(int nodeId) const {
 	vector<int> neighbours;
 
-	for (list<unsigned int>::const_iterator it = incidentEdges[nodeId].begin();
+	for (vector<unsigned int>::const_iterator it = incidentEdges[nodeId].begin();
 			it != incidentEdges[nodeId].end(); it++) {
 
 		if (edges[*it].getV1() == nodeId) {
