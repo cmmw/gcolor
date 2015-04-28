@@ -11,6 +11,7 @@
 #include <algorithm>
 
 extern int visitedNodes;
+extern int triedColors;
 
 namespace graphcoloring {
 
@@ -54,8 +55,11 @@ Solution* Algorithm::backtrack(Solution* solution, Graph& graph) {
 
 	vector<int> domainValues = orderColors(nodeId, solution, graph);
 
+	//cout << "Colorlist size: " << domainValues.size() << endl;
 	for (vector<int>::iterator it = domainValues.begin(); it != domainValues.end();
 			it++) {
+
+		triedColors++;
 		int color = *it;
 		if (assignmentIsConsistent(nodeId, color, solution, graph)) {
 			Solution* newSolution = new Solution(*solution);
@@ -81,7 +85,7 @@ Solution* Algorithm::backtrack(Solution* solution, Graph& graph) {
 int Algorithm::selectUnassignedNode(Solution* solution, Graph& graph)
 {
 	return MRV(solution, graph);
-//	return simpleSelectionHeuristic(solution, graph);
+	//return simpleSelectionHeuristic(solution, graph);
 }
 
 int Algorithm::simpleSelectionHeuristic(Solution* solution, const Graph& graph)
@@ -145,8 +149,8 @@ int Algorithm::getUnassignedNeighbours(Solution* solution, const Graph& graph, i
 }
 
 bool Algorithm::inferences(Solution* solution, Graph& graph, int lastSetNodeId) {
-	return maintainingArcConsistency(solution, graph, lastSetNodeId);
-	//return simpleForwardChecking(solution, graph, lastSetNodeId);
+	//return maintainingArcConsistency(solution, graph, lastSetNodeId);
+	return simpleForwardChecking(solution, graph, lastSetNodeId);
 }
 
 bool Algorithm::simpleForwardChecking(Solution* solution, Graph& graph, int lastSetNodeId) {
@@ -246,33 +250,56 @@ bool Algorithm::revise(Solution* solution, Graph& graph, int nodeId1, int nodeId
 vector<int> Algorithm::orderColors(int nodeId, Solution* solution, Graph& graph)
 {
 	return leastConstrainingValue(nodeId, solution, graph);
-//	return simpleValueOrdering(nodeId, solution, graph);
+
+	//return simpleValueOrdering(nodeId, solution, graph);
 }
 
 vector<int> Algorithm::leastConstrainingValue(int nodeId, Solution* solution, Graph& graph)
 {
-	//Value Selection Heuristic: least-constraining-value (value that rules out the fewest choices for the neighbours)
+	//Value Selection Heuristic: least-constraining-value (value that rules out the fewest choices for the neighbors)
 	std::vector<int> orderedValues;
 
 	std::list<int> colors;
 	std::list<int> values;
 
-	for (int i = 1; i <= solution->getK(); i++)
+	//cout << "leastConstrainingValue() called with nodeId " << nodeId << endl;
+
+	vector<int> domainValues = solution->getDomainValues(nodeId);
+	for (vector<int>::iterator it = domainValues.begin(); it != domainValues.end(); it++)
 	{
-		int value = countOccurrence(i, graph, solution, nodeId);
-		int pos = 0;
-		for (std::list<int>::iterator it = values.begin(); it != values.end(); it++)
-		{
-			if (value < *it)
-				break;
-			pos++;
+		int value = countOccurrence(*it, graph, solution, nodeId);
+		//cout << "countOccurence for color " << *it << " delivered: " << value << endl;;
+
+		if (value != -1) {
+			int pos = 0;
+			for (std::list<int>::iterator it2 = values.begin(); it2 != values.end(); it2++)
+			{
+				if (value < *it2)
+					break;
+				pos++;
+			}
+			std::list<int>::iterator valIt = values.begin();
+			std::list<int>::iterator colIt = colors.begin();
+			std::advance(valIt, pos);
+			std::advance(colIt, pos);
+			values.insert(valIt, value);
+			colors.insert(colIt, *it);
+
+			//cout << "valueList:";
+
+//			for (std::list<int>::iterator it2 = values.begin(); it2 != values.end(); it2++)
+//			{
+//				cout << " " << *it2;
+//			}
+//			cout << endl;
+//
+//			cout << "colorList:";
+//			for (std::list<int>::iterator it2 = colors.begin(); it2 != colors.end(); it2++)
+//			{
+//				cout << " " << *it2;
+//			}
+//			cout << endl;
 		}
-		std::list<int>::iterator valIt = values.begin();
-		std::list<int>::iterator colIt = colors.begin();
-		std::advance(valIt, pos);
-		std::advance(colIt, pos);
-		values.insert(valIt, value);
-		colors.insert(colIt, i);
 	}
 
 	orderedValues = std::vector<int>(colors.begin(), colors.end());
@@ -290,12 +317,15 @@ int Algorithm::countOccurrence(int col, const Graph& graph, Solution* solution, 
 	int count = 0;
 	for (vector<int>::iterator it = neighbours.begin(); it != neighbours.end(); it++)
 	{
-		if (solution->getColor(*it) != -1)
-			continue;
+		if (solution->getColor(*it) == -1) {
 
-		std::vector<int> domain = solution->getDomainValues(*it);
-		if (std::find(domain.begin(), domain.end(), col) != domain.end())
-			count++;
+			std::vector<int> domain = solution->getDomainValues(*it);
+			if (std::find(domain.begin(), domain.end(), col) != domain.end())
+				count++;
+		}
+		else if (solution->getColor(*it) == col) {
+			return -1;
+		}
 	}
 	return count;
 }

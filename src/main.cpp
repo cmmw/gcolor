@@ -14,6 +14,7 @@ using namespace graphcoloring;
 using namespace std;
 
 int visitedNodes = 0;
+int triedColors = 0;
 
 int main(int argc, char* argv[])
 {
@@ -112,6 +113,7 @@ int main(int argc, char* argv[])
 	double ms = double(end - begin) / CLOCKS_PER_SEC;
 	LOG << "Took " << ms << " seconds";
 	LOG << "Visited " << visitedNodes << " nodes";
+	LOG << "Tried " << triedColors << " colors for the nodes";
 
 	if (finalSolution != NULL) {
 		finalSolution->printSolution();
