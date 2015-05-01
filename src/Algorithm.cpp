@@ -23,23 +23,40 @@ Algorithm::~Algorithm() {
 
 // Repeatedly launch backtracking to find solution with minimum k
 Solution* Algorithm::findOptimalSolution(Graph& graph) {
-	int k = 2;
-	bool solutionFound = false;
+	int startK = 0;
+	int endK = graph.getNum_Nodes();
+	int k = (endK - startK) / 2;
 	Solution* solution;
-	while (!solutionFound) {
+	Solution* bestSolution = NULL;
+	while (true) {
 		LOG << "Trying with k = " << k;
+		LOG << "searching in [" << startK << ", " << endK << "]";
 		solution = backtrack(new Solution(graph.getNum_Nodes(), k), graph);
 
 		if (solution != NULL) {
-			solutionFound = true;
-			return solution;
+			int step = (endK - k) / 2;
+			if(step == 0)
+				step = 1;
+			std::cout << "found" << std::endl;
+			endK = k;
+			k -= step;
+			delete bestSolution;
+			bestSolution = solution;
 		}
 		else {
-			k++;
+			int step = (k - startK) / 2;
+			if(step == 0)
+				step = 1;
+			std::cout << "not found" << std::endl;
+			startK = k;
+			k += step;
 		}
+
+		if ((endK - startK) == 1)
+			break;
+
 	}
-	// should never be reached
-	return NULL;
+	return bestSolution;
 }
 
 
@@ -249,7 +266,6 @@ bool Algorithm::revise(Solution* solution, Graph& graph, int nodeId1, int nodeId
 vector<int> Algorithm::orderColors(int nodeId, Solution* solution, Graph& graph)
 {
 	return leastConstrainingValue(nodeId, solution, graph);
-
 	//return simpleValueOrdering(nodeId, solution, graph);
 }
 
