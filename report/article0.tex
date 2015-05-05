@@ -1,0 +1,103 @@
+
+\documentclass[a4paper]{scrartcl}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage{amsmath}
+\usepackage[pdftex]{graphicx}
+\usepackage{listings}
+\usepackage{amssymb}
+\usepackage{listings}
+\usepackage{chngpage}
+
+
+\KOMAoption{captions}{bottombeside}
+\newcommand{\HRule}{\rule{\linewidth}{0.5mm}}
+
+
+\author{
+  Winter, Felix\\
+  \texttt{e0825516@student.tuwien.ac.at}
+  \and
+  Wagner, Christian\\
+  \texttt{e0725942@student.tuwien.ac.at}
+}
+\title{Assignment Phase 1 for Problem Solving and Search in AI 2015}
+
+
+\begin{document}
+
+\setlength{\abovedisplayskip}{0pt}
+\setlength{\belowdisplayskip}{0pt}
+
+\begingroup
+ \makeatletter
+ %\@titlepagetrue
+ \maketitle
+\endgroup
+
+\section{Description of the algorithm}
+
+For the first phase of the assignment we decided to implement a Backtracking based algorithm for the graph coloring problem on our own. Basically we applied several techniques which are described in \cite{Russell:2003:AIM:773294}.
+
+In its simplest form the algorithm just performs a recursive depth-first search to find a valid coloring for a given number of colors. However to improve the performance we included two alternative kinds of inference during the search: \emph{Simple Forward Checking} and \emph{Maintaining Arc Consistency}. While Simple Forward Checking only estableshises arc-consistency for the last node which had been assigned a color. Maintaining Arc Consistency does what the name says: It keeps the whole constraint graph arc consistent during the entire search process. Therefore a lot of inferences can be performed earlier in search to prune the search tree, however at a higher computation cost for each search step.
+
+Additionally we included a variable and value selection heuristic to guide the ordering of the nodes and assigned values during search.
+To select an unassigned variable we use the \emph{minimum-remaining-values heuristic} which prefers variables which have fewer legal values left. To break ties we additionally include the \emph{degree heuristic} which select nodes with the greatest number of neighbours first.
+Regarding the ordering of the colors we apply the \emph{least-constraining-value} heuristic. Values that rule out fewer choices for neighbouring nodes are therefore preferred.
+
+\subsection{Solving the optimization problem}
+
+In our basic form the backtracking search we have implemented only solves the decision problem of k-colorability. We use a binary search starting from the number of nodes divided by 2 and iteratively solve the k-decision problem to find the minimum number of k which solves the problem.
+
+\section{Description of the parameters}
+
+There is not so much to say about the parameters of our algorithm, the only alternative that we provide is in whether using the Maintaining Arc Consistency or the Simple Forward Checking approach. Besides this it is also possible to deactivate the Variable and Value Selection heuristics with the command line parameters.
+
+\section{Results and Discussion}
+
+
+\begin{table}
+  \small
+    \begin{adjustwidth}{-.5in}{-.5in}  
+        \begin{center}
+\begin{tabular}{r | r | r | r | r | r | r | r | r}
+\hline
+Nodes & Gr.Heu. & Time &  VLNS & Time & Total & GRASP & Time & Total \\
+\hline \hline 
+10 & 356 & 0 & 347 & 0.0037 & 0.1663 & 347 & 0.0335 & 0.8766 \\
+\hline
+30 & 798 & 0.0001 & 767 & 0.1394 & 3.0000 & 764 & 1.4821 & 26.4703 \\
+\hline
+60 & 1841 & 0.0007 & 1712 & 2.8097 & 16.3781 & 1711 & 9.4027 & 315.7900 \\
+\hline
+90 & 2171 & 0.0017 & 2055 & 13.6852 & 222.8823 & 2055 & 67.0838 & 1709.3321\\
+\hline
+120 & 2844 & 0.0050 & 2745 & 17.5720 & 194.1892 & 2712 & 6.6881 & 200.7002 \\
+\hline
+180 & 4874 & 0.0071 & 4651 & 7.8030 & 106.1305 & 4623 & 36.1978 & 1216.7366 \\
+\hline
+300 & 9390 & 0.0210 & 8833 & 7.9615 & 138.3080 & 8782 & 48.0761 & 1457.6698 \\
+\hline
+400 & 11374 & 0.0387 & 10929 & 32.6781 & 482.6105 & 11073 & 21.5001 & 1061.1469 \\
+\hline
+500 & 13922 & 0.0627 & 13514 & 7.5111 & 97.4571 & 13463 & 71.5584 & 2753.0495 \\
+\hline
+700 & 19007 & 0.1300 & 18354 & 21.4090 & 396.1424 & 18311 & 447.6060 & 9254.5938 \\
+\hline
+\end{tabular}
+        \caption{Table with best results from the old VLNS algorithms. }
+        \label{myTable1}
+        \end{center}
+    \end{adjustwidth}
+\end{table}
+
+
+
+\bibliographystyle{plain}
+\bibliography{literature0}
+
+\end{document}
+
+
