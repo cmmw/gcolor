@@ -9,6 +9,10 @@
 #include "Logger.h"
 
 #include <algorithm>
+#include "time.h"
+
+#define TIME_PASSED double(clock() - begin) / CLOCKS_PER_SEC
+
 
 extern int visitedNodes;
 extern int triedColors;
@@ -16,6 +20,9 @@ extern int triedColors;
 extern int mac;
 extern int mrv;
 extern int lcv;
+extern clock_t begin;
+extern double time_limit;
+
 
 namespace graphcoloring {
 
@@ -32,7 +39,7 @@ Solution* Algorithm::findOptimalSolution(Graph& graph) {
 	int k = (endK - startK) / 2;
 	Solution* solution;
 	Solution* bestSolution = NULL;
-	while (true) {
+	while (time_limit == -1 || TIME_PASSED < time_limit) {
 		LOG << "Trying with k = " << k;
 		LOG << "searching in [" << startK << ", " << endK << "]";
 		solution = backtrack(new Solution(graph.getNum_Nodes(), k), graph);
@@ -67,6 +74,10 @@ Solution* Algorithm::findOptimalSolution(Graph& graph) {
 // Backtracking algorithm as described in the Book:
 // "Artificial Intelligence: A Modern Approach" by Stuart Russel and Peter Norvig
 Solution* Algorithm::backtrack(Solution* solution, Graph& graph) {
+	if (time_limit != -1 && TIME_PASSED > time_limit) {
+		return NULL;
+	}
+
 	int nodeId = selectUnassignedNode(solution, graph);
 	visitedNodes++;
 	if (nodeId == -1) {

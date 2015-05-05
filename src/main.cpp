@@ -20,13 +20,16 @@ int mac = 0;
 int mrv = 1;
 int lcv = 1;
 
+clock_t begin;
+double time_limit = -1;
+
 int main(int argc, char* argv[])
 {
 	srand(time(NULL));
-	if (argc < 3 || argc > 13)
+	if (argc < 3 || argc > 15)
 	{
 		cout << "Usage: " << argv[0] << " " << "--instanceFile <file> "
-				<< "[--k <number>] " << "[--graphVizOutFile <file>] [--mac <0/1>] [--mrv <0/1>] [--lcv <0/1>]" << endl;
+				<< "[--k <number>] " << "[--graphVizOutFile <file>] [--mac <0/1>] [--mrv <0/1>] [--lcv <0/1>] [--timelimit <msecs>]" << endl;
 		return -1;
 	}
 
@@ -50,6 +53,7 @@ int main(int argc, char* argv[])
 						{ "mac", required_argument, 0, 'm' },
 						{ "mrv", required_argument, 0, 'r' },
 						{ "lcv", required_argument, 0, 'l' },
+						{ "timelimit", required_argument, 0, 't' },
 						{ 0, 0, 0, 0 }
 				};
 
@@ -87,6 +91,11 @@ int main(int argc, char* argv[])
 			arg.str(optarg);
 			arg >> lcv;
 			break;
+		case 't':
+			arg.str(optarg);
+			arg >> time_limit;
+			time_limit = time_limit/1000;
+			break;
 		default:
 			cerr << "?? getopt returned character code " << oct << showbase << c << " ??" << endl;
 			return 1;
@@ -111,7 +120,7 @@ int main(int argc, char* argv[])
 	// getopt end
 
 
-	clock_t begin = clock();
+	begin = clock();
 
 	Graph graph = Graph(instanceFile);
 
@@ -134,7 +143,10 @@ int main(int argc, char* argv[])
 	LOG << "Visited " << visitedNodes << " nodes";
 	LOG << "Tried " << triedColors << " colors for the nodes";
 
-	if (finalSolution != NULL) {
+	if (time_limit != -1 && time_limit < ms) {
+		cout << "Time limit reached without finding a solution" << endl;
+	}
+	else if (finalSolution != NULL) {
 		finalSolution->printSolution();
 
 		if (!graphVizOutFile.empty()) {
