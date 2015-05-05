@@ -16,13 +16,17 @@ using namespace std;
 int visitedNodes = 0;
 int triedColors = 0;
 
+int mac = 0;
+int mrv = 1;
+int lcv = 1;
+
 int main(int argc, char* argv[])
 {
 	srand(time(NULL));
-	if (argc < 3 || argc > 7)
+	if (argc < 3 || argc > 13)
 	{
 		cout << "Usage: " << argv[0] << " " << "--instanceFile <file> "
-				<< "--k <number> " << "[--graphVizOutFile <file>]" << endl;
+				<< "[--k <number>] " << "[--graphVizOutFile <file>] [--mac <0/1>] [--mrv <0/1>] [--lcv <0/1>]" << endl;
 		return -1;
 	}
 
@@ -43,6 +47,9 @@ int main(int argc, char* argv[])
 						{ "instanceFile", required_argument, 0, 'i' },
 						{ "k", required_argument, 0, 'k' },
 						{ "graphVizOutFile", required_argument, 0, 'v' },
+						{ "mac", required_argument, 0, 'm' },
+						{ "mrv", required_argument, 0, 'r' },
+						{ "lcv", required_argument, 0, 'l' },
 						{ 0, 0, 0, 0 }
 				};
 
@@ -67,6 +74,18 @@ int main(int argc, char* argv[])
 			break;
 		case 'v':
 			graphVizOutFile = optarg;
+			break;
+		case 'm':
+			arg.str(optarg);
+			arg >> mac;
+			break;
+		case 'r':
+			arg.str(optarg);
+			arg >> mrv;
+			break;
+		case 'l':
+			arg.str(optarg);
+			arg >> lcv;
 			break;
 		default:
 			cerr << "?? getopt returned character code " << oct << showbase << c << " ??" << endl;

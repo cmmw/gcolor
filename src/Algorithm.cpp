@@ -13,6 +13,10 @@
 extern int visitedNodes;
 extern int triedColors;
 
+extern int mac;
+extern int mrv;
+extern int lcv;
+
 namespace graphcoloring {
 
 Algorithm::Algorithm() {
@@ -101,8 +105,12 @@ Solution* Algorithm::backtrack(Solution* solution, Graph& graph) {
 
 int Algorithm::selectUnassignedNode(Solution* solution, Graph& graph)
 {
-	return MRV(solution, graph);
-	//return simpleSelectionHeuristic(solution, graph);
+	if (mrv > 0) {
+		return MRV(solution, graph);
+	}
+	else {
+		return simpleSelectionHeuristic(solution, graph);
+	}
 }
 
 int Algorithm::simpleSelectionHeuristic(Solution* solution, const Graph& graph)
@@ -166,8 +174,12 @@ int Algorithm::getUnassignedNeighbours(Solution* solution, const Graph& graph, i
 }
 
 bool Algorithm::inferences(Solution* solution, Graph& graph, int lastSetNodeId) {
-	return maintainingArcConsistency(solution, graph, lastSetNodeId);
-	//return simpleForwardChecking(solution, graph, lastSetNodeId);
+	if (mac > 0) {
+		return maintainingArcConsistency(solution, graph, lastSetNodeId);
+	}
+	else {
+		return simpleForwardChecking(solution, graph, lastSetNodeId);
+	}
 }
 
 bool Algorithm::simpleForwardChecking(Solution* solution, Graph& graph, int lastSetNodeId) {
@@ -265,8 +277,12 @@ bool Algorithm::revise(Solution* solution, Graph& graph, int nodeId1, int nodeId
 
 vector<int> Algorithm::orderColors(int nodeId, Solution* solution, Graph& graph)
 {
-	return leastConstrainingValue(nodeId, solution, graph);
-	//return simpleValueOrdering(nodeId, solution, graph);
+	if (lcv > 0) {
+		return leastConstrainingValue(nodeId, solution, graph);
+	}
+	else {
+		return simpleValueOrdering(nodeId, solution, graph);
+	}
 }
 
 vector<int> Algorithm::leastConstrainingValue(int nodeId, Solution* solution, Graph& graph)
@@ -277,13 +293,10 @@ vector<int> Algorithm::leastConstrainingValue(int nodeId, Solution* solution, Gr
 	std::list<int> colors;
 	std::list<int> values;
 
-	//cout << "leastConstrainingValue() called with nodeId " << nodeId << endl;
-
 	vector<int> domainValues = solution->getDomainValues(nodeId);
 	for (vector<int>::iterator it = domainValues.begin(); it != domainValues.end(); it++)
 	{
 		int value = countOccurrence(*it, graph, solution, nodeId);
-		//cout << "countOccurence for color " << *it << " delivered: " << value << endl;;
 
 		if (value != -1) {
 			int pos = 0;
@@ -300,20 +313,6 @@ vector<int> Algorithm::leastConstrainingValue(int nodeId, Solution* solution, Gr
 			values.insert(valIt, value);
 			colors.insert(colIt, *it);
 
-			//cout << "valueList:";
-
-//			for (std::list<int>::iterator it2 = values.begin(); it2 != values.end(); it2++)
-//			{
-//				cout << " " << *it2;
-//			}
-//			cout << endl;
-//
-//			cout << "colorList:";
-//			for (std::list<int>::iterator it2 = colors.begin(); it2 != colors.end(); it2++)
-//			{
-//				cout << " " << *it2;
-//			}
-//			cout << endl;
 		}
 	}
 
