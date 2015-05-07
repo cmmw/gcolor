@@ -48,7 +48,8 @@ Solution* Algorithm::findOptimalSolution(Graph& graph) {
 			int step = (endK - k) / 2;
 			if(step == 0)
 				step = 1;
-			std::cout << "found" << std::endl;
+			std::cout << "found solution (current time " << TIME_PASSED << "): " << std::endl;
+			solution->printSolution();
 			endK = k;
 			k -= step;
 			delete bestSolution;
