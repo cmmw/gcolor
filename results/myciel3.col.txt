@@ -1,0 +1,42 @@
+Reading instance from file benchmarks/myciel3.col
+Number of nodes: 11
+Number of edges: 20
+Incidency list:
+0: (0,1), (0,3), (0,6), (0,8), 
+1: (0,1), (1,2), (1,5), (1,7), 
+2: (1,2), (2,4), (2,6), (2,9), 
+3: (0,3), (3,4), (3,5), (3,9), 
+4: (2,4), (3,4), (4,7), (4,8), 
+5: (1,5), (3,5), (5,10), 
+6: (0,6), (2,6), (6,10), 
+7: (1,7), (4,7), (7,10), 
+8: (0,8), (4,8), (8,10), 
+9: (2,9), (3,9), (9,10), 
+10: (5,10), (6,10), (7,10), (8,10), (9,10), 
+Trying with k = 5
+searching in [0, 11]
+found
+Trying with k = 2
+searching in [0, 5]
+not found
+Trying with k = 3
+searching in [2, 5]
+not found
+Trying with k = 4
+searching in [3, 5]
+found
+Took 0.00587 seconds
+Visited 161 nodes
+Tried 183 colors for the nodes
+Solution: 
+0: 2
+1: 1
+2: 2
+3: 3
+4: 1
+5: 2
+6: 3
+7: 2
+8: 3
+9: 4
+10: 1
