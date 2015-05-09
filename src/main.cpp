@@ -7,6 +7,7 @@
 #include "Graph.h"
 #include "Solution.h"
 #include "Algorithm.h"
+#include "Algorithm2.h"
 #include "Constants.h"
 #include "time.h"
 
@@ -19,6 +20,7 @@ int triedColors = 0;
 int mac = 0;
 int mrv = 1;
 int lcv = 1;
+int alg = 0;
 
 clock_t begin;
 double time_limit = -1;
@@ -29,7 +31,7 @@ int main(int argc, char* argv[])
 	if (argc < 3 || argc > 15)
 	{
 		cout << "Usage: " << argv[0] << " " << "--instanceFile <file> "
-				<< "[--k <number>] " << "[--graphVizOutFile <file>] [--mac <0/1>] [--mrv <0/1>] [--lcv <0/1>] [--timelimit <msecs>]" << endl;
+				<< "[--k <number>] " << "[--graphVizOutFile <file>] [--mac <0/1>] [--mrv <0/1>] [--lcv <0/1>] [--timelimit <msecs>] [--alg <0/1>]" << endl;
 		return -1;
 	}
 
@@ -54,6 +56,7 @@ int main(int argc, char* argv[])
 						{ "mrv", required_argument, 0, 'r' },
 						{ "lcv", required_argument, 0, 'l' },
 						{ "timelimit", required_argument, 0, 't' },
+						{ "alg", required_argument, 0, 'a' },
 						{ 0, 0, 0, 0 }
 				};
 
@@ -64,11 +67,15 @@ int main(int argc, char* argv[])
 
 		switch (c)
 		{
+		case 'a':
+			arg.str(optarg);
+			arg >> alg;
+			break;
 		case 'i':
 			instanceFile = optarg;
 			break;
 		case 'k':
-			arg.str(optarg);
+
 			arg >> k;
 			if (k < 0)
 			{
@@ -123,15 +130,21 @@ int main(int argc, char* argv[])
 	begin = clock();
 
 	Graph graph = Graph(instanceFile);
-
-	Algorithm algorithm;
 	Solution* finalSolution;
-	if (k == -1) {
-		finalSolution = algorithm.findOptimalSolution(graph);
-	}
-	else {
-		Solution* initialSolution = new Solution(graph.getNum_Nodes(), k);
-		finalSolution = algorithm.backtrack(initialSolution, graph);
+	if(alg == 0)
+	{
+		Algorithm algorithm;
+		if (k == -1) {
+			finalSolution = algorithm.findOptimalSolution(graph);
+		}
+		else {
+			Solution* initialSolution = new Solution(graph.getNum_Nodes(), k);
+			finalSolution = algorithm.backtrack(initialSolution, graph);
+		}
+	} else
+	{
+		Algorithm2 algorithm(graph);
+		finalSolution = new Solution(algorithm.findOptimalSolution());
 	}
 
 	clock_t end = clock();
