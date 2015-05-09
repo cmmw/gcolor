@@ -14,7 +14,7 @@ namespace graphcoloring
 {
 
 Algorithm2::Algorithm2(const Graph& graph) :
-		graph(graph), k(30), bestSolution(graph.getNum_Nodes(), k), bestCosts(INT_MAX), currentSol(graph.getNum_Nodes(), k), tabuListSize(10), maxTries(300)
+		graph(graph), k(30), bestSolution(graph.getNum_Nodes(), k), bestCosts(INT_MAX), currentSol(graph.getNum_Nodes(), k), tabuListSize(50), maxTries(3000)
 {
 
 }
@@ -112,7 +112,7 @@ void Algorithm2::solve()
 		//Move to next solution
 		if (foundMove)
 		{
-			LOG << "Assign node " << bestNode << " color " << bestColor;
+//			LOG << "Assign node " << bestNode << " color " << bestColor;
 			int oldColor = currentSol.getColor(bestNode);
 			for (std::vector<int>::iterator it = bestNeighbors.begin(); it != bestNeighbors.end(); it++)
 			{
@@ -151,7 +151,7 @@ void Algorithm2::solve()
 		{
 			LOG << "No solution found... reduce size of tabu-list!";
 		}
-		LOG << "evaluate: " << evaluate();
+//		LOG << "evaluate: " << evaluate();
 		count++;
 	}
 }

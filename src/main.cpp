@@ -25,6 +25,24 @@ int alg = 0;
 clock_t begin;
 double time_limit = -1;
 
+void checkSolution(Solution* sol, const Graph& graph)
+{
+	LOG << "Checking solution";
+	for(int i = 0; i < graph.getNum_Nodes(); i++)
+	{
+		std::vector<int> neighbors = graph.getNeighbours(i);
+		for(std::vector<int>::iterator it = neighbors.begin(); it != neighbors.end(); it++)
+		{
+			if(sol->getColor(i) == sol->getColor(*it))
+			{
+				LOG << "Solution not feasible!!";
+				return;
+			}
+		}
+	}
+	LOG << "Solution is feasible";
+}
+
 int main(int argc, char* argv[])
 {
 	srand(time(NULL));
@@ -145,6 +163,7 @@ int main(int argc, char* argv[])
 	{
 		Algorithm2 algorithm(graph);
 		finalSolution = new Solution(algorithm.findOptimalSolution());
+		checkSolution(finalSolution, graph);
 	}
 
 	clock_t end = clock();

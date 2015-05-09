@@ -48,7 +48,7 @@ Solution* Algorithm::findOptimalSolution(Graph& graph) {
 			int step = (endK - k) / 2;
 			if(step == 0)
 				step = 1;
-			std::cout << "found solution (current time " << TIME_PASSED << "): " << std::endl;
+			LOG << "found solution (current time " << TIME_PASSED << "): ";
 			solution->printSolution();
 			endK = k;
 			k -= step;
@@ -59,7 +59,7 @@ Solution* Algorithm::findOptimalSolution(Graph& graph) {
 			int step = (k - startK) / 2;
 			if(step == 0)
 				step = 1;
-			std::cout << "not found" << std::endl;
+			LOG << "not found";
 			startK = k;
 			k += step;
 		}
