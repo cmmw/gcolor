@@ -55,43 +55,44 @@ In our basic form the backtracking search we have implemented only solves the de
 
 There is not so much to say about the parameters of our algorithm, the only alternative that we provide is in whether using the Maintaining Arc Consistency or the Simple Forward Checking approach. Besides this it is also possible to deactivate the Variable and Value Selection heuristics with the command line parameters.
 
-\section{Results and Discussion}
+\section{Experimental Results and Discussion}
 
+We used several instances in DIMACS format from the web as benchmarks \footnote{http://mat.gsia.cmu.edu/COLOR/instances.html}. For all the instances we set a time limit of two hours, and ran our algorithm in 3 different variants. In the first variant we use Simple Forward Checking with the Minimum Remaining Value Heuristic and the Least Constrained Value heuristic. As a second approach we use the Maintaining Arc Consistency algorithm with the Least Constrained Value heuristic and in the third variant we use Simple Forward Checking without the Least Constrained Value heuristic. Since the Minimum Remaining Value Heuristic worked very well on some small test instances we decided to always enable this heuristic. 
 
 \begin{table}
   \small
     \begin{adjustwidth}{-.5in}{-.5in}  
         \begin{center}
-\begin{tabular}{r | r | r | r | r | r | r | r | r}
-\hline
-Nodes & Gr.Heu. & Time &  VLNS & Time & Total & GRASP & Time & Total \\
+          \begin{tabular}{r | r | r | r | r | r | r | r | r | r}
+            \hline
+             & \multicolumn{3}{c|}{Variant 1 FC+LCV} & \multicolumn{3}{c|}{Variant 2 MAC+LCV} & \multicolumn{3}{c}{Variant 3 FC} \\
+            \hline
+Instance & Time & k & optimal &  Time & k & optimal & Time & k & optimal \\
 \hline \hline 
-10 & 356 & 0 & 347 & 0.0037 & 0.1663 & 347 & 0.0335 & 0.8766 \\
-\hline
-30 & 798 & 0.0001 & 767 & 0.1394 & 3.0000 & 764 & 1.4821 & 26.4703 \\
-\hline
-60 & 1841 & 0.0007 & 1712 & 2.8097 & 16.3781 & 1711 & 9.4027 & 315.7900 \\
-\hline
-90 & 2171 & 0.0017 & 2055 & 13.6852 & 222.8823 & 2055 & 67.0838 & 1709.3321\\
-\hline
-120 & 2844 & 0.0050 & 2745 & 17.5720 & 194.1892 & 2712 & 6.6881 & 200.7002 \\
-\hline
-180 & 4874 & 0.0071 & 4651 & 7.8030 & 106.1305 & 4623 & 36.1978 & 1216.7366 \\
-\hline
-300 & 9390 & 0.0210 & 8833 & 7.9615 & 138.3080 & 8782 & 48.0761 & 1457.6698 \\
-\hline
-400 & 11374 & 0.0387 & 10929 & 32.6781 & 482.6105 & 11073 & 21.5001 & 1061.1469 \\
-\hline
-500 & 13922 & 0.0627 & 13514 & 7.5111 & 97.4571 & 13463 & 71.5584 & 2753.0495 \\
-\hline
-700 & 19007 & 0.1300 & 18354 & 21.4090 & 396.1424 & 18311 & 447.6060 & 9254.5938 \\
+david.col & 10800s & 21 & no & 10800s & 21 & no & 10800s & 21 & no  \\
+huck.col & 10800s & 19 & no & 10800s & 19 & no & 10800s & 19 & no \\
+jean.col & 330.434s & 10 & yes & 1653.28s & 10 & yes & 288.373s & 10 & yes \\
+queen5\_5.col & 0.017404s & 5 & yes & 0.058097s & 5 & yes & 0.009576s & 5 & yes  \\
+queen6\_6.col & 13.645s & 7 & yes &  44.9005s & 7 & yes  & 11.7202s & 7 & yes \\
+queen7\_7.col & 14.4932s & 7 & yes  & 62.4359s & 7 & yes & 12.5009s  & 7 & yes \\
+queen8\_12.col & 10800s & 12 & yes &  10800s & 12 & yes & 10800s & 12 & yes  \\
+queen8\_8.col & 10800s & 16  & no  & 10800s & 16 & no & 10800s & 16 & no \\
+queen9\_9.col & 10800s & 10 & yes & 10800s & 10 & yes & 10800s & 10 & yes \\
+myciel3.col &  0.005048s & 4 & yes & 0.00746s & 4 & yes  & 0.005062s & 4  & yes \\
+myciel4.col & 0.445205s &  5& yes & 0.610285s & 5 & yes & 0.375327s & 5 & yes  \\
+myciel5.col & 6973.74s & 6 & yes &10598.6s  & 6 & yes & 6187.41s & 6  & yes \\
+myciel6.col & 10800s & 11 & no & 10800s & 11  & no & 10800s & 11 & no \\
 \hline
 \end{tabular}
-        \caption{Table with best results from the old VLNS algorithms. }
+        \caption{Table with results for the different variations and benchmark instances. FC: Simple Forward Checking, MAC: Maintaining Arc Consistency, LCV: Least Constrained Value heuristic }
         \label{myTable1}
         \end{center}
     \end{adjustwidth}
 \end{table}
+
+As it can be seen in the results of our experiments which are shown in table \ref{myTable1} all variants retrieve the same k for all instances and only differ in their running time. Therefore Simple Forward Checking without the use of the Least Constrained Value Selection seems to be the most efficent variant. Maintaining Arc Consistency and the Least Constrained value heuristic examine fewer nodes in most of the cases, however the additional overhead which is needed to calculate all the inferences takes too much time and does not seem to pay off in our experiments.
+
+%'david.col', 'huck.col', 'jean.col', 'queen5_5.col', 'queen6_6.col', 'queen7_7.col', 'queen8_12.col', 'queen8_8.col', 'queen9_9.col', 'myciel3.col', 'myciel4.col', 'myciel5.col', 'myciel6.col']
 
 
 
