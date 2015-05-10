@@ -41,15 +41,15 @@
 
 For the first phase of the assignment we decided to implement a Backtracking based algorithm for the graph coloring problem on our own. Basically we applied several techniques which are described in \cite{Russell:2003:AIM:773294}.
 
-In its simplest form the algorithm just performs a recursive depth-first search to find a valid coloring for a given number of colors. However to improve the performance we included two alternative kinds of inference during the search: \emph{Simple Forward Checking} and \emph{Maintaining Arc Consistency}. While Simple Forward Checking only estableshises arc-consistency for the last node which had been assigned a color. Maintaining Arc Consistency does what the name says: It keeps the whole constraint graph arc consistent during the entire search process. Therefore a lot of inferences can be performed earlier in search to prune the search tree, however at a higher computation cost for each search step.
+In its simplest form the algorithm just performs a recursive depth-first search to find a valid coloring for a given number of colors. However to improve the performance we included two alternative kinds of inference during the search: \emph{Simple Forward Checking} and \emph{Maintaining Arc Consistency}. While Simple Forward Checking only establishes arc-consistency for the last node which had been assigned a color, Maintaining Arc Consistency does what the name says: It keeps the whole constraint graph arc consistent during the entire search process. Therefore a lot of inferences can be performed earlier in search to prune the search tree, however at a higher computation cost during each search step.
 
-Additionally we included a variable and value selection heuristic to guide the ordering of the nodes and assigned values during search.
-To select an unassigned variable we use the \emph{minimum-remaining-values heuristic} which prefers variables which have fewer legal values left. To break ties we additionally include the \emph{degree heuristic} which select nodes with the greatest number of neighbours first.
-Regarding the ordering of the colors we apply the \emph{least-constraining-value} heuristic. Values that rule out fewer choices for neighbouring nodes are therefore preferred.
+Additionally we included a variable and value selection heuristics to guide the ordering of the nodes and assigned values during search.
+To select an unassigned variable we use the \emph{minimum-remaining-values heuristic} which prefers variables which have fewer legal values left. To break ties we additionally include the \emph{degree heuristic} which select nodes with a greater number of neighbors first.
+Regarding the ordering of the colors we apply the \emph{least-constraining-value} heuristic. Values that rule out fewer choices for neighboring nodes are therefore preferred.
 
 \subsection{Solving the optimization problem}
 
-In our basic form the backtracking search we have implemented only solves the decision problem of k-colorability. We use a binary search starting from the number of nodes divided by 2 and iteratively solve the k-decision problem to find the minimum number of k which solves the problem.
+In our basic form the backtracking search we have implemented only solves the decision problem of k-color-ability. We use a binary search starting from the number of nodes divided by 2 and iteratively solve the k-decision problem to find the minimum number of k which solves the problem.
 
 \section{Description of the parameters}
 
@@ -57,7 +57,26 @@ There is not so much to say about the parameters of our algorithm, the only alte
 
 \section{Experimental Results and Discussion}
 
-We used several instances in DIMACS format from the web as benchmarks \footnote{http://mat.gsia.cmu.edu/COLOR/instances.html}. For all the instances we set a time limit of two hours, and ran our algorithm in 3 different variants. In the first variant we use Simple Forward Checking with the Minimum Remaining Value Heuristic and the Least Constrained Value heuristic. As a second approach we use the Maintaining Arc Consistency algorithm with the Least Constrained Value heuristic and in the third variant we use Simple Forward Checking without the Least Constrained Value heuristic. Since the Minimum Remaining Value Heuristic worked very well on some small test instances we decided to always enable this heuristic. 
+We used several instances in DIMACS format from the web as benchmarks \footnote{http://mat.gsia.cmu.edu/COLOR/instances.html}. For all the instances we set a time limit of two hours, and ran our algorithm in 3 different variants. In the first variant we use Simple Forward Checking with the Minimum Remaining Value Heuristic and the Least Constrained Value heuristic. As a second approach we use the Maintaining Arc Consistency algorithm with the Least Constrained Value heuristic and in the third variant we use Simple Forward Checking without the Least Constrained Value heuristic. Since the Minimum Remaining Value Heuristic worked very well on small test instances we decided to always enable this heuristic (see table \ref{mrvTable}). All experiments were conducted on a Quad-core 2666 MHz Intel CPU with 8 GB RAM.
+
+\begin{table}
+  \small
+    \begin{adjustwidth}{-.5in}{-.5in}  
+        \begin{center}
+          \begin{tabular}{r | r | r | r | r | r | r }
+            \hline
+             & \multicolumn{3}{c|}{with MRV} & \multicolumn{3}{c|}{without MRV} \\
+            \hline
+Instance & Time & k & optimal &  Time & k & optimal & Time & k & optimal \\
+\hline \hline
+myciel4.col &  0.376911s & 5 & yes & 10.7155s & 5 & yes \\
+\hline
+\end{tabular}
+        \caption{Table with results for two testcases with Simple Forward Checking with and without the MRV selection heuristic. }
+        \label{myTable1}
+        \end{center}
+    \end{adjustwidth}
+\end{table}
 
 \begin{table}
   \small
@@ -90,7 +109,7 @@ myciel6.col & 10800s & 11 & no & 10800s & 11  & no & 10800s & 11 & no \\
     \end{adjustwidth}
 \end{table}
 
-As it can be seen in the results of our experiments which are shown in table \ref{myTable1} all variants retrieve the same k for all instances and only differ in their running time. Therefore Simple Forward Checking without the use of the Least Constrained Value Selection seems to be the most efficent variant. Maintaining Arc Consistency and the Least Constrained value heuristic examine fewer nodes in most of the cases, however the additional overhead which is needed to calculate all the inferences takes too much time and does not seem to pay off in our experiments.
+As it can be seen in the results of our experiments which are shown in table \ref{myTable1} all variants retrieve the same k for all instances and only differ in their running time. Therefore Simple Forward Checking without the use of the Least Constrained Value Selection seems to be the most efficient variant. Maintaining Arc Consistency and the Least Constrained value heuristic examine fewer nodes in most of the cases, however the additional overhead which is needed to calculate all the inferences takes too much time and does not seem to pay off in our experiments.
 
 %'david.col', 'huck.col', 'jean.col', 'queen5_5.col', 'queen6_6.col', 'queen7_7.col', 'queen8_12.col', 'queen8_8.col', 'queen9_9.col', 'myciel3.col', 'myciel4.col', 'myciel5.col', 'myciel6.col']
 
