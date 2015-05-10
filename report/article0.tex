@@ -67,13 +67,13 @@ We used several instances in DIMACS format from the web as benchmarks \footnote{
             \hline
              & \multicolumn{3}{c|}{with MRV} & \multicolumn{3}{c|}{without MRV} \\
             \hline
-Instance & Time & k & optimal &  Time & k & optimal & Time & k & optimal \\
+Instance & Time & k & optimal &  Time & k & optimal  \\
 \hline \hline
 myciel4.col &  0.376911s & 5 & yes & 10.7155s & 5 & yes \\
 \hline
 \end{tabular}
-        \caption{Table with results for two testcases with Simple Forward Checking with and without the MRV selection heuristic. }
-        \label{myTable1}
+        \caption{Table with results for myciel4.col instance using Simple Forward Checking with and without the MRV selection heuristic. }
+        \label{mrvTable}
         \end{center}
     \end{adjustwidth}
 \end{table}
@@ -109,7 +109,27 @@ myciel6.col & 10800s & 11 & no & 10800s & 11  & no & 10800s & 11 & no \\
     \end{adjustwidth}
 \end{table}
 
-As it can be seen in the results of our experiments which are shown in table \ref{myTable1} all variants retrieve the same k for all instances and only differ in their running time. Therefore Simple Forward Checking without the use of the Least Constrained Value Selection seems to be the most efficient variant. Maintaining Arc Consistency and the Least Constrained value heuristic examine fewer nodes in most of the cases, however the additional overhead which is needed to calculate all the inferences takes too much time and does not seem to pay off in our experiments.
+\begin{table}
+  \small
+    \begin{adjustwidth}{-.5in}{-.5in}  
+ \begin{center}
+          \begin{tabular}{r | r | r | r | r | r | r | r | r | r}
+            \hline
+             & \multicolumn{3}{c|}{Variant 1 FC+LCV} & \multicolumn{3}{c|}{Variant 2 MAC+LCV} & \multicolumn{3}{c}{Variant 3 FC} \\
+            \hline
+Instance & Time & Nodes & Colors &  Time & Nodes & Colors & Time & Nodes & Colors \\
+\hline \hline 
+queen7\_7.col & 14.4932s & 120338 & 141638 & 62.4359s & 24691 & 45991 & 12.5009s  & 121000 & 142398 \\
+\hline
+
+\end{tabular}
+        \caption{Table with number of visited Nodes and tried colors for queen7\_7.col instance for the 3 Variants. }
+        \label{visitedTable}
+        \end{center}
+    \end{adjustwidth}
+\end{table}
+
+As it can be seen in the results of our experiments which are shown in table \ref{myTable1} all variants retrieve the same k for all instances and only differ in their running time. Therefore Simple Forward Checking without the use of the Least Constrained Value Selection seems to be the most efficient variant. Maintaining Arc Consistency and the Least Constrained value heuristic examine fewer nodes in most of the cases (see table \ref{visitedTable}), however the additional overhead which is needed to calculate all the inferences takes too much time and does not seem to pay off in our experiments.
 
 %'david.col', 'huck.col', 'jean.col', 'queen5_5.col', 'queen6_6.col', 'queen7_7.col', 'queen8_12.col', 'queen8_8.col', 'queen9_9.col', 'myciel3.col', 'myciel4.col', 'myciel5.col', 'myciel6.col']
 
