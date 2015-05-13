@@ -14,7 +14,7 @@ namespace graphcoloring
 {
 
 Algorithm2::Algorithm2(const Graph& graph) :
-		graph(graph), k(30), bestSolution(graph.getNum_Nodes(), k), bestCosts(INT_MAX), currentSol(graph.getNum_Nodes(), k), tabuListSize(30), maxTries(50)
+		graph(graph), k(30), bestSolution(graph.getNum_Nodes(), k), bestCosts(INT_MAX), currentSol(graph.getNum_Nodes(), k), tabuListSize(30), maxTries(5000)
 {
 
 }
@@ -63,9 +63,9 @@ Solution Algorithm2::findOptimalSolution()
 	while (i < maxTries)
 	{
 		std::vector<Move> moves = genMoves();
-		Move _move = getBestMove(moves);
+//		Move _move = getBestMove(moves);
 //		Move _move = getRandomMove(moves);
-//		Move _move = getMinConflictMove(moves);
+		Move _move = getMinConflictMove();
 
 		move(_move);
 		i++;
@@ -138,11 +138,15 @@ std::vector<Algorithm2::Move> Algorithm2::genMoves(bool ignoreTabulist)
 	return moves;
 }
 
-Algorithm2::Move Algorithm2::getMinConflictMove(const std::vector<Move>& moves)
+Algorithm2::Move Algorithm2::getMinConflictMove()
 {
-	Move m = getRandomMove(moves);	return m;
-	m.color = getMinConflictColor(m.node);
-
+	Move m;
+	do
+	{
+		m.node = rand() % graph.getNum_Nodes();
+		m.color = getMinConflictColor(m.node);
+	} while (m.color == -1);
+	return m;
 }
 
 Algorithm2::Move Algorithm2::getRandomMove(const std::vector<Move>& moves)
@@ -179,7 +183,7 @@ int Algorithm2::getMinConflictColor(int node)
 
 	for (unsigned int i = 0; i < colorClasses.size(); i++)
 	{
-		if (i + 1 == currentColor)
+		if (i + 1 == currentColor || !moveAllowed(node, i + 1))
 			continue;
 
 		if (neighborColors[i] < conflicts)

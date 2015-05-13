@@ -36,6 +36,10 @@ private:
 
 	struct Move
 	{
+		Move() : node(-1), color(-1), deltaCosts(-1)
+		{
+		}
+
 		Move(int node, int color, int deltaCosts) :
 				node(node), color(color), deltaCosts(deltaCosts)
 		{
@@ -52,7 +56,7 @@ private:
 	bool moveAllowed(int node, int color);
 
 	std::vector<Move> genMoves(bool ignoreTabulist = false);
-	Move getMinConflictMove(const std::vector<Move>& moves);
+	Move getMinConflictMove();
 	Move getRandomMove(const std::vector<Move>& moves);
 	Move getBestMove(const std::vector<Move>& moves);
 	void move(const Move& move);
