@@ -63,9 +63,9 @@ Solution Algorithm2::findOptimalSolution()
 	while (i < maxTries)
 	{
 		std::vector<Move> moves = genMoves();
-//		Move _move = getBestMove(moves);
+		Move _move = getBestMove(moves);
 //		Move _move = getRandomMove(moves);
-		Move _move = getMinConflictMove();
+//		Move _move = getMinConflictMove();
 
 		move(_move);
 		i++;
@@ -117,16 +117,31 @@ std::vector<Algorithm2::Move> Algorithm2::genMoves(bool ignoreTabulist)
 {
 	std::vector<Move> moves;
 	std::vector<int> colorClass = colorClasses.back();
-	for (std::vector<int>::iterator it = colorClass.begin(); it != colorClass.end(); it++)
-	{
-		int nodeColor = currentSol.getColor(*it);
+	//for (std::vector<int>::iterator it = colorClass.begin(); it != colorClass.end(); it++)
+	//{
+	//
+	//  int nodeId = *it;
+
+	// NOTE von Felix: ich wuerds gern mal so probieren, dass er immer einen
+	// zufaelligen Knoten aus der letzten Klasse auswaehlt so wie es im Paper steht:
+	// http://leeds-faculty.colorado.edu/glover/TS%20-%20vignettes%20-%20coloring%20-%20Malaguti%20&%20Toth%20Extended.pdf
+	// Koennen wir aber evt. spaeter wieder aendern.
+
+	int random_idx = 1 + (rand() % (int)(colorClass.size() - 1 + 1));
+	int nodeId = colorClass[random_idx-1];
+	int currentCost = evaluate();
+
+	int nodeColor = currentSol.getColor(nodeId);
+
 		for (int color = 1; (unsigned int) color < colorClasses.size(); color++)		//skip last color
 		{
-			if (color == nodeColor || (!ignoreTabulist && !moveAllowed(*it, color)))
+
+
+			if (color == nodeColor /*|| (!ignoreTabulist)*/) // NOTE von Felix: Was macht das ignoreTabuList genau hier?
 				continue;
 
 			int delta = 0;
-			std::vector<int> neighbors = graph.getNeighbours(*it);
+			std::vector<int> neighbors = graph.getNeighbours(nodeId);
 			for (std::vector<int>::iterator neighbor = neighbors.begin(); neighbor != neighbors.end(); neighbor++)
 			{
 
@@ -134,9 +149,22 @@ std::vector<Algorithm2::Move> Algorithm2::genMoves(bool ignoreTabulist)
 					delta += graph.getNeighbours(*neighbor).size();
 			}
 			delta -= neighbors.size();
-			moves.push_back(Move(*it, color, delta));
+
+
+			bool aspiration_criteria = false;
+
+			if (currentCost + delta < bestCosts) {
+				bestCosts = currentCost + delta;
+				aspiration_criteria = true;
+			}
+
+
+
+			if (aspiration_criteria || moveAllowed(nodeId, color)) {
+				moves.push_back(Move(nodeId, color, delta));
+			}
 		}
-	}
+	//}
 	return moves;
 }
 
