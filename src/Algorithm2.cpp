@@ -14,7 +14,7 @@ namespace graphcoloring
 {
 
 Algorithm2::Algorithm2(const Graph& graph) :
-		graph(graph), k(30), bestSolution(graph.getNum_Nodes(), k), bestCosts(INT_MAX), currentSol(graph.getNum_Nodes(), k), tabuListSize(50), maxTries(10000)
+		graph(graph), k(30), bestSolution(graph.getNum_Nodes(), k), bestCosts(INT_MAX), currentSol(graph.getNum_Nodes(), k), tabuListSize(30), maxTries(5000)
 {
 
 }
@@ -51,146 +51,123 @@ void Algorithm2::greedyConstHeu()
 	}
 	bestCosts = evaluate();
 	currentSol = bestSolution;
+	LOG << "Colors: " << colorClasses.size();
 }
 
 Solution Algorithm2::findOptimalSolution()
 {
+	/*Initial solution*/
 	greedyConstHeu();
-	solve();
+
+	unsigned int i = 0;
+	while (i < maxTries)
+	{
+		std::vector<Move> moves = genMoves();
+//		Move _move = getBestMove(moves);
+//		Move _move = getRandomMove(moves);
+		Move _move = getMinConflictMove();
+
+		move(_move);
+		i++;
+	}
+
 	return bestSolution;
 }
 
-
-
-void Algorithm2::solve()
+void Algorithm2::move(const Move& move)
 {
-	unsigned int count = 0;
-	while (count < maxTries)
+	std::vector<int> bestNeighbors = graph.getNeighbours(move.node);
+	int newColor = move.color;
+	int oldColor = currentSol.getColor(move.node);
+	for (std::vector<int>::iterator it = bestNeighbors.begin(); it != bestNeighbors.end(); it++)
 	{
-		std::vector<int> colorClass = colorClasses.back();
-		int bestDelta = INT_MAX;
-		int bestColor = -1;
-		int bestNode = -1;
-		std::vector<int> bestNeighbors;
-		bool foundMove = false;
 
-//		for (std::vector<int>::iterator it = colorClass.begin(); it != colorClass.end(); it++)
-//		{
-////			int color = getMinConflictColor(*it);
-////			if (color == -1)
-////				continue;
-//
-//			/***/
-//
-//			/***/
-//		}
-
-		// NOTE from Felix: ich wuerde es gern so probieren, wie im paper dass per zufall bestimmt
-		// wird welcher Node aus der letzten Klasse gewaehlt wird.
-		// Wir koennten das andere aber dann auch reinbringen, aber ich glaub immer den allerbesten swap
-		// ist gar nicht unbedingt so gut
-
-		//printClasses();
-
-		int random_idx = 1 + (rand() % (int)(colorClass.size() - 1 + 1));
-		//std::cout << "random_idx: " << random_idx << std::endl;
-
-		foundMove = getBestTargetColor(colorClass[random_idx-1], bestDelta, bestColor, bestNode, bestNeighbors);
-
-
-		//Move to next solution
-		if (foundMove)
+		if (currentSol.getColor(*it) == newColor)
 		{
-//			LOG << "Assign node " << bestNode << " color " << bestColor;
-			int oldColor = currentSol.getColor(bestNode);
-			for (std::vector<int>::iterator it = bestNeighbors.begin(); it != bestNeighbors.end(); it++)
-			{
-				if (currentSol.getColor(*it) == bestColor)
-				{
-					currentSol.setColor(*it, oldColor);
-					colorClasses[bestColor - 1].erase(std::remove(colorClasses[bestColor - 1].begin(), colorClasses[bestColor - 1].end(), *it), colorClasses[bestColor - 1].end());
-					colorClasses[oldColor - 1].push_back(*it);
-//
-//					NOTE von Felix: Ich kommentier das vorerst aus,
-//					ich weiss du willst damit zusaetzliche Schritte tabu machen
-//					aber ich wollte eigentlich das wirklich nur der swap der weiter
-//					unten gemacht wird tabu wird
-// 					NOTE 2: Habs jetzt doch wieder reingegeben weils echt einiges bringt anscheinend.
-//
-//					//Add move to tabu-list
-					if (tabuList.size() > tabuListSize)
-						tabuList.pop_front();
-					tabuList.push_back(make_pair(*it, bestColor));
-				}
-			}
-			currentSol.setColor(bestNode, bestColor);
-			colorClasses[oldColor - 1].erase(std::remove(colorClasses[oldColor - 1].begin(), colorClasses[oldColor - 1].end(), bestNode), colorClasses[oldColor - 1].end());
-			colorClasses[bestColor - 1].push_back(bestNode);
+			currentSol.setColor(*it, oldColor);
+			colorClasses[newColor - 1].erase(std::remove(colorClasses[newColor - 1].begin(), colorClasses[newColor - 1].end(), *it), colorClasses[newColor - 1].end());
+			colorClasses[oldColor - 1].push_back(*it);
 
 			//Add move to tabu-list
 			if (tabuList.size() > tabuListSize)
 				tabuList.pop_front();
-			tabuList.push_back(make_pair(bestNode, oldColor));
-
-			//Removed a color TODO: reset tabu-list here?
-			if (colorClasses.back().empty())
-			{
-				LOG << "************ Removed a color ************";
-				colorClasses.pop_back();
-				bestCosts = evaluate();
-				bestSolution = currentSol;
-				count = 0;
-			}
-
-		} else
-		{
-			LOG << "No solution found... reduce size of tabu-list!";
+			tabuList.push_back(make_pair(*it, newColor));
 		}
-//		LOG << "evaluate: " << evaluate();
-		count++;
+	}
+	currentSol.setColor(move.node, newColor);
+	colorClasses[oldColor - 1].erase(std::remove(colorClasses[oldColor - 1].begin(), colorClasses[oldColor - 1].end(), move.node), colorClasses[oldColor - 1].end());
+	colorClasses[newColor - 1].push_back(move.node);
+
+	//Add move to tabu-list
+	if (tabuList.size() > tabuListSize)
+		tabuList.pop_front();
+	tabuList.push_back(make_pair(move.node, oldColor));
+
+	//Removed a color TODO: reset tabu-list here?
+	if (colorClasses.back().empty())
+	{
+		colorClasses.pop_back();
+		bestCosts = evaluate();
+		bestSolution = currentSol;
+		LOG << "Colors: " << colorClasses.size();
 	}
 }
 
-bool Algorithm2::getBestTargetColor(int node, int &bestDelta, int &bestColor, int &bestNode, std::vector<int> &bestNeighbors) {
-	bool foundMove = false;
-
-	int nodeColor = currentSol.getColor(node);
-	int currentCost = evaluate();
-	for (int color = 1; (unsigned int) color < colorClasses.size(); color++)		//skip last color
+std::vector<Algorithm2::Move> Algorithm2::genMoves(bool ignoreTabulist)
+{
+	std::vector<Move> moves;
+	std::vector<int> colorClass = colorClasses.back();
+	for (std::vector<int>::iterator it = colorClass.begin(); it != colorClass.end(); it++)
 	{
-		if (color == nodeColor)
-			continue;
-
-		int delta = 0;
-		std::vector<int> neighbors = graph.getNeighbours(node);
-		for (std::vector<int>::iterator neighbor = neighbors.begin(); neighbor != neighbors.end(); neighbor++)
+		int nodeColor = currentSol.getColor(*it);
+		for (int color = 1; (unsigned int) color < colorClasses.size(); color++)		//skip last color
 		{
-			if (color == currentSol.getColor(*neighbor))
-				delta += graph.getNeighbours(*neighbor).size();
-		}
-		delta -= neighbors.size();
+			if (color == nodeColor || (!ignoreTabulist && !moveAllowed(*it, color)))
+				continue;
 
-		bool aspiration_criteria = false;
-		if (currentCost + delta < bestCosts) {
-			bestCosts = currentCost + delta;
-			aspiration_criteria = true;
-		}
-
-		if (aspiration_criteria || moveAllowed(node, color))
-		{
-			foundMove = true;
-			if (delta < bestDelta)
+			int delta = 0;
+			std::vector<int> neighbors = graph.getNeighbours(*it);
+			for (std::vector<int>::iterator neighbor = neighbors.begin(); neighbor != neighbors.end(); neighbor++)
 			{
-				bestDelta = delta;
-				bestColor = color;
-				bestNode = node;
-				bestNeighbors = neighbors;
+
+				if (color == currentSol.getColor(*neighbor))
+					delta += graph.getNeighbours(*neighbor).size();
 			}
+			delta -= neighbors.size();
+			moves.push_back(Move(*it, color, delta));
 		}
 	}
+	return moves;
+}
 
+Algorithm2::Move Algorithm2::getMinConflictMove()
+{
+	Move m;
+	do
+	{
+		m.node = rand() % graph.getNum_Nodes();
+		m.color = getMinConflictColor(m.node);
+	} while (m.color == -1);
+	return m;
+}
 
-	return foundMove;
+Algorithm2::Move Algorithm2::getRandomMove(const std::vector<Move>& moves)
+{
+	int idx = rand() % moves.size();
+	return moves[idx];
+}
+
+Algorithm2::Move Algorithm2::getBestMove(const std::vector<Algorithm2::Move>& moves)
+{
+	Move bestMove = moves[0];
+	for (std::vector<Move>::const_iterator it = moves.begin(); it != moves.end(); it++)
+	{
+		if (it->deltaCosts < bestMove.deltaCosts)
+		{
+			bestMove = *it;
+		}
+	}
+	return bestMove;
 }
 
 

@@ -34,16 +34,35 @@ private:
 	std::vector<std::vector<int> > colorClasses;
 	std::deque<std::pair<int, int> > tabuList;
 
+	struct Move
+	{
+		Move() : node(-1), color(-1), deltaCosts(-1)
+		{
+		}
+
+		Move(int node, int color, int deltaCosts) :
+				node(node), color(color), deltaCosts(deltaCosts)
+		{
+		}
+		int node;
+		int color;
+		int deltaCosts;
+	};
+
 	void greedyConstHeu();
-	void solve();
 	int evaluate();
 	int getMinConflictColor(int node);
-	bool getBestTargetColor(int node, int &bestDelta, int &bestColor, int &bestNode, std::vector<int> &bestNeighbors);
-
 
 
 	void printClasses();
 	bool moveAllowed(int node, int color);
+
+	std::vector<Move> genMoves(bool ignoreTabulist = false);
+	Move getMinConflictMove();
+	Move getRandomMove(const std::vector<Move>& moves);
+	Move getBestMove(const std::vector<Move>& moves);
+	void move(const Move& move);
+
 
 };
 
