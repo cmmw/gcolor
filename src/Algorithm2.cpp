@@ -14,7 +14,7 @@ namespace graphcoloring
 {
 
 Algorithm2::Algorithm2(const Graph& graph) :
-		graph(graph), k(30), bestSolution(graph.getNum_Nodes(), k), bestCosts(INT_MAX), currentSol(graph.getNum_Nodes(), k), tabuListSize(50), maxTries(3000)
+		graph(graph), k(30), bestSolution(graph.getNum_Nodes(), k), bestCosts(INT_MAX), currentSol(graph.getNum_Nodes(), k), tabuListSize(50), maxTries(10000)
 {
 
 }
@@ -60,6 +60,8 @@ Solution Algorithm2::findOptimalSolution()
 	return bestSolution;
 }
 
+
+
 void Algorithm2::solve()
 {
 	unsigned int count = 0;
@@ -72,42 +74,29 @@ void Algorithm2::solve()
 		std::vector<int> bestNeighbors;
 		bool foundMove = false;
 
-		for (std::vector<int>::iterator it = colorClass.begin(); it != colorClass.end(); it++)
-		{
-//			int color = getMinConflictColor(*it);
-//			if (color == -1)
-//				continue;
+//		for (std::vector<int>::iterator it = colorClass.begin(); it != colorClass.end(); it++)
+//		{
+////			int color = getMinConflictColor(*it);
+////			if (color == -1)
+////				continue;
+//
+//			/***/
+//
+//			/***/
+//		}
 
-			/***/
-			int nodeColor = currentSol.getColor(*it);
-			for (int color = 1; (unsigned int) color < colorClasses.size(); color++)		//skip last color
-			{
-				if (color == nodeColor)
-					continue;
+		// NOTE from Felix: ich wuerde es gern so probieren, wie im paper dass per zufall bestimmt
+		// wird welcher Node aus der letzten Klasse gewaehlt wird.
+		// Wir koennten das andere aber dann auch reinbringen, aber ich glaub immer den allerbesten swap
+		// ist gar nicht unbedingt so gut
 
-				int delta = 0;
-				std::vector<int> neighbors = graph.getNeighbours(*it);
-				for (std::vector<int>::iterator neighbor = neighbors.begin(); neighbor != neighbors.end(); neighbor++)
-				{
-					if (color == currentSol.getColor(*neighbor))
-						delta += graph.getNeighbours(*neighbor).size();
-				}
-				delta -= neighbors.size();
+		//printClasses();
 
-				if (moveAllowed(*it, color))		//TODO: Aspiration criteria
-				{
-					foundMove = true;
-					if (delta < bestDelta)
-					{
-						bestDelta = delta;
-						bestColor = color;
-						bestNode = *it;
-						bestNeighbors = neighbors;
-					}
-				}
-			}
-			/***/
-		}
+		int random_idx = 1 + (rand() % (int)(colorClass.size() - 1 + 1));
+		//std::cout << "random_idx: " << random_idx << std::endl;
+
+		foundMove = getBestTargetColor(colorClass[random_idx-1], bestDelta, bestColor, bestNode, bestNeighbors);
+
 
 		//Move to next solution
 		if (foundMove)
@@ -121,8 +110,14 @@ void Algorithm2::solve()
 					currentSol.setColor(*it, oldColor);
 					colorClasses[bestColor - 1].erase(std::remove(colorClasses[bestColor - 1].begin(), colorClasses[bestColor - 1].end(), *it), colorClasses[bestColor - 1].end());
 					colorClasses[oldColor - 1].push_back(*it);
-
-					//Add move to tabu-list
+//
+//					NOTE von Felix: Ich kommentier das vorerst aus,
+//					ich weiss du willst damit zusaetzliche Schritte tabu machen
+//					aber ich wollte eigentlich das wirklich nur der swap der weiter
+//					unten gemacht wird tabu wird
+// 					NOTE 2: Habs jetzt doch wieder reingegeben weils echt einiges bringt anscheinend.
+//
+//					//Add move to tabu-list
 					if (tabuList.size() > tabuListSize)
 						tabuList.pop_front();
 					tabuList.push_back(make_pair(*it, bestColor));
@@ -155,6 +150,49 @@ void Algorithm2::solve()
 		count++;
 	}
 }
+
+bool Algorithm2::getBestTargetColor(int node, int &bestDelta, int &bestColor, int &bestNode, std::vector<int> &bestNeighbors) {
+	bool foundMove = false;
+
+	int nodeColor = currentSol.getColor(node);
+	int currentCost = evaluate();
+	for (int color = 1; (unsigned int) color < colorClasses.size(); color++)		//skip last color
+	{
+		if (color == nodeColor)
+			continue;
+
+		int delta = 0;
+		std::vector<int> neighbors = graph.getNeighbours(node);
+		for (std::vector<int>::iterator neighbor = neighbors.begin(); neighbor != neighbors.end(); neighbor++)
+		{
+			if (color == currentSol.getColor(*neighbor))
+				delta += graph.getNeighbours(*neighbor).size();
+		}
+		delta -= neighbors.size();
+
+		bool aspiration_criteria = false;
+		if (currentCost + delta < bestCosts) {
+			bestCosts = currentCost + delta;
+			aspiration_criteria = true;
+		}
+
+		if (aspiration_criteria || moveAllowed(node, color))
+		{
+			foundMove = true;
+			if (delta < bestDelta)
+			{
+				bestDelta = delta;
+				bestColor = color;
+				bestNode = node;
+				bestNeighbors = neighbors;
+			}
+		}
+	}
+
+
+	return foundMove;
+}
+
 
 int Algorithm2::getMinConflictColor(int node)
 {

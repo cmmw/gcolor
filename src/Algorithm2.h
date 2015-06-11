@@ -38,6 +38,10 @@ private:
 	void solve();
 	int evaluate();
 	int getMinConflictColor(int node);
+	bool getBestTargetColor(int node, int &bestDelta, int &bestColor, int &bestNode, std::vector<int> &bestNeighbors);
+
+
+
 	void printClasses();
 	bool moveAllowed(int node, int color);
 
