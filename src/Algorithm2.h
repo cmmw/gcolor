@@ -35,7 +35,6 @@ private:
 	int maxTries;
 	double timeLimit;
 	int p;
-	double tl;
 
 	std::vector<std::vector<int> > colorClasses;
 	std::deque<std::pair<int, int> > tabuList;
