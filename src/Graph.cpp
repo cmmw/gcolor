@@ -75,15 +75,15 @@ Graph::Graph(string fileName) : num_nodes(0), num_edges(0) {
 	cout << "Number of nodes: " << num_nodes << "\n";
 	cout << "Number of edges: " << num_edges << "\n";
 
-	cout << "Incidency list:" << "\n";
-	for( int v = 0; v < num_nodes; v++ ) {
-		cout << v << ": ";
-		for (vector<unsigned int>::iterator it = incidentEdges[v].begin();
-				it != incidentEdges[v].end(); it++) {
-			cout << "(" << edges[*it].getV1() << "," << edges[*it].getV2() << "), ";
-		}
-		cout << "\n";
-	}
+//	cout << "Incidency list:" << "\n";
+//	for( int v = 0; v < num_nodes; v++ ) {
+//		cout << v << ": ";
+//		for (vector<unsigned int>::iterator it = incidentEdges[v].begin();
+//				it != incidentEdges[v].end(); it++) {
+//			cout << "(" << edges[*it].getV1() << "," << edges[*it].getV2() << "), ";
+//		}
+//		cout << "\n";
+//	}
 
 
 }

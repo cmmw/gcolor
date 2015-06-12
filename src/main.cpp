@@ -213,7 +213,7 @@ int main(int argc, char* argv[])
 	LOG << "Tried " << triedColors << " colors for the nodes";
 
 	if (alg == 0 && time_limit != -1 && time_limit < ms) {
-		cout << "Time limit reached without finding a solution" << endl;
+		LOG << "Time limit reached without finding a solution";
 	}
 	else if (finalSolution != NULL) {
 		finalSolution->printSolution();
@@ -221,13 +221,13 @@ int main(int argc, char* argv[])
 		if (!graphVizOutFile.empty()) {
 
 			if (k > graphviz_color_count) {
-				cout << "Too many colors, cannot write graphVizFile" << endl;
+				LOG << "Too many colors, cannot write graphVizFile";
 			}
 			finalSolution->writeGraphVizFile(graphVizOutFile, graph);
 		}
 	}
 	else {
-		cout << "No valid Solution found!" << endl;
+		LOG << "No valid Solution found!";
 	}
 
 	delete finalSolution;

@@ -60,10 +60,10 @@ int Solution::getNum_Nodes() const {
 }
 
 void Solution::printSolution() const {
-	cout << "Solution: " << endl;
-	for (int i=0; i<num_nodes; i++) {
-		cout << i << ": " << colors[i] << endl;
-	}
+//	cout << "Solution: " << endl;
+//	for (int i=0; i<num_nodes; i++) {
+//		cout << i << ": " << colors[i] << endl;
+//	}
 }
 
 void Solution::writeGraphVizFile(string fileName, Graph graph) const {

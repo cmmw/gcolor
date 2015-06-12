@@ -23,7 +23,7 @@ public:
 	Algorithm2(const Graph& graph, int p, double timeLimit);
 
 	virtual ~Algorithm2();
-	Solution findOptimalSolution();
+	Solution findOptimalSolution(const Solution* solution = NULL);
 
 private:
 	Graph graph;

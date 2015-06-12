@@ -69,24 +69,24 @@ void Algorithm2::greedyConstHeu()
 	LOG << "Colors: " << colorClasses.size();
 }
 
-Solution Algorithm2::findOptimalSolution()
+Solution Algorithm2::findOptimalSolution(const Solution* solution)
 {
 	/*Initial solution*/
-	greedyConstHeu();
+	if(solution == NULL)
+	{
+		greedyConstHeu();
+	} else
+	{
+		currentSol = *solution;
+		bestSolution = *solution;
+	}
 
 	int i = 0;
-
 	bool end = false;
 	while (!end)
 	{
-
-
-
 		std::vector<Move> moves = genMoves();
-
-
 		int r = rand() % 100;
-
 		Move _move;
 
 		if (r  >= 100 - p) {
@@ -108,7 +108,6 @@ Solution Algorithm2::findOptimalSolution()
 			end = i > maxTries;
 		}
 	}
-
 	return bestSolution;
 }
 
