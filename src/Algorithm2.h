@@ -18,9 +18,9 @@ namespace graphcoloring
 class Algorithm2
 {
 public:
-	Algorithm2(const Graph& graph);
-	Algorithm2(const Graph& graph, int p, int iterationLimit);
-	Algorithm2(const Graph& graph, int p, double timeLimit);
+	Algorithm2(const Graph& graph, double tl);
+	Algorithm2(const Graph& graph, int p, int iterationLimit, double tl);
+	Algorithm2(const Graph& graph, int p, double timeLimit, double tl);
 
 	virtual ~Algorithm2();
 	Solution findOptimalSolution(const Solution* solution = NULL);
@@ -35,6 +35,7 @@ private:
 	int maxTries;
 	double timeLimit;
 	int p;
+	double tl;
 
 	std::vector<std::vector<int> > colorClasses;
 	std::deque<std::pair<int, int> > tabuList;

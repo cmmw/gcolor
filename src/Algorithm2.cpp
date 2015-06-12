@@ -18,19 +18,19 @@ extern clock_t begin;
 namespace graphcoloring
 {
 
-Algorithm2::Algorithm2(const Graph& graph) :
-		graph(graph), k(graph.getNum_Nodes()), bestSolution(graph.getNum_Nodes(), graph.getNum_Nodes()), bestCosts(INT_MAX), currentSol(graph.getNum_Nodes(), graph.getNum_Nodes()), tabuListSize(30), maxTries(25000), timeLimit(-1), p(5)
+Algorithm2::Algorithm2(const Graph& graph, double tl) :
+		graph(graph), k(graph.getNum_Nodes()), bestSolution(graph.getNum_Nodes(), graph.getNum_Nodes()), bestCosts(INT_MAX), currentSol(graph.getNum_Nodes(), graph.getNum_Nodes()), tabuListSize(30), maxTries(25000), timeLimit(-1), p(5), tl(tl)
 {
 
 }
 
-Algorithm2::Algorithm2(const Graph& graph, int p, int iterationLimit) :
-		graph(graph), k(graph.getNum_Nodes()), bestSolution(graph.getNum_Nodes(), graph.getNum_Nodes()), bestCosts(INT_MAX), currentSol(graph.getNum_Nodes(), graph.getNum_Nodes()), tabuListSize(30), maxTries(iterationLimit), timeLimit(-1), p(p)
+Algorithm2::Algorithm2(const Graph& graph, int p, int iterationLimit, double tl) :
+		graph(graph), k(graph.getNum_Nodes()), bestSolution(graph.getNum_Nodes(), graph.getNum_Nodes()), bestCosts(INT_MAX), currentSol(graph.getNum_Nodes(), graph.getNum_Nodes()), tabuListSize(30), maxTries(iterationLimit), timeLimit(-1), p(p), tl(tl)
 {
 
 }
-Algorithm2::Algorithm2(const Graph& graph, int p, double timeLimit) :
-		graph(graph), k(graph.getNum_Nodes()), bestSolution(graph.getNum_Nodes(), graph.getNum_Nodes()), bestCosts(INT_MAX), currentSol(graph.getNum_Nodes(), graph.getNum_Nodes()), tabuListSize(30), maxTries(-1), timeLimit(timeLimit), p(p)
+Algorithm2::Algorithm2(const Graph& graph, int p, double timeLimit, double tl) :
+		graph(graph), k(graph.getNum_Nodes()), bestSolution(graph.getNum_Nodes(), graph.getNum_Nodes()), bestCosts(INT_MAX), currentSol(graph.getNum_Nodes(), graph.getNum_Nodes()), tabuListSize(30), maxTries(-1), timeLimit(timeLimit), p(p), tl(tl)
 {
 
 }
@@ -57,16 +57,8 @@ void Algorithm2::greedyConstHeu()
 			}
 		}
 		bestSolution.setColor(i, domain.front());
-		unsigned int color = domain.front();
-		if (colorClasses.size() < color)
-		{
-			colorClasses.resize(color);
-		}
-		colorClasses[color - 1].push_back(i);
 	}
-	bestCosts = evaluate();
 	currentSol = bestSolution;
-	LOG << "Colors: " << colorClasses.size();
 }
 
 Solution Algorithm2::findOptimalSolution(const Solution* solution)
@@ -81,11 +73,23 @@ Solution Algorithm2::findOptimalSolution(const Solution* solution)
 		bestSolution = *solution;
 	}
 
+	/*Init color classes*/
+	for (int i = 0; i < graph.getNum_Nodes(); i++)
+	{
+		unsigned int color = currentSol.getColor(i);
+		if (colorClasses.size() < color)
+		{
+			colorClasses.resize(color);
+		}
+		colorClasses[color - 1].push_back(i);
+	}
+	bestCosts = evaluate();
+	LOG << "Colors: " << colorClasses.size();
+
 	int i = 0;
 	bool end = false;
 	while (!end)
 	{
-		std::vector<Move> moves = genMoves();
 		int r = rand() % 100;
 		Move _move;
 
@@ -95,6 +99,14 @@ Solution Algorithm2::findOptimalSolution(const Solution* solution)
 		}
 		else
 		{
+			std::vector<Move> moves = genMoves();
+			if (moves.empty())
+			{
+				tabuList.erase(tabuList.begin(), tabuList.begin() + tabuListSize / 2);
+				tabuListSize = tabuList.size();
+				std::cout << tabuListSize << std::endl;
+				continue;
+			}
 			_move = getBestMove(moves);
 		}
 

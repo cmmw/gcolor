@@ -24,6 +24,7 @@ int alg = 0;
 
 int iterationLimit = 50000;
 int p = 5;
+int z = 0.2;
 
 clock_t begin;
 double time_limit = -1;
@@ -80,6 +81,7 @@ int main(int argc, char* argv[])
 						{ "alg", required_argument, 0, 'a' },
 						{ "iterationLimit", required_argument, 0, 'o' },
 						{ "randomWalkProbability", required_argument, 0, 'p' },
+						{ "tl", required_argument, 0, 'z' },
 						{ 0, 0, 0, 0 }
 				};
 
@@ -143,6 +145,14 @@ int main(int argc, char* argv[])
 				return 1;
 			}
 			break;
+		case 'z':
+			arg.str(optarg);
+			arg >> z;
+			if(z < 0)
+			{
+				z = 0.2;
+			}
+			break;
 		default:
 			cerr << "?? getopt returned character code " << oct << showbase << c << " ??" << endl;
 			return 1;
@@ -185,19 +195,19 @@ int main(int argc, char* argv[])
 	{
 
 		if (time_limit != -1) {
-			Algorithm2 algorithm(graph, p, time_limit);
+			Algorithm2 algorithm(graph, p, time_limit, z);
 			finalSolution = new Solution(algorithm.findOptimalSolution());
 			checkSolution(finalSolution, graph);
 		}
 		else if (iterationLimit != -1) {
 
-			Algorithm2 algorithm(graph, p, iterationLimit);
+			Algorithm2 algorithm(graph, p, iterationLimit, z);
 			finalSolution = new Solution(algorithm.findOptimalSolution());
 			checkSolution(finalSolution, graph);
 		}
 		else {
 
-		Algorithm2 algorithm(graph);
+		Algorithm2 algorithm(graph, z);
 		finalSolution = new Solution(algorithm.findOptimalSolution());
 		checkSolution(finalSolution, graph);
 		}
