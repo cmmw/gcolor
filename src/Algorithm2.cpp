@@ -14,7 +14,7 @@ namespace graphcoloring
 {
 
 Algorithm2::Algorithm2(const Graph& graph) :
-		graph(graph), k(30), bestSolution(graph.getNum_Nodes(), k), bestCosts(INT_MAX), currentSol(graph.getNum_Nodes(), k), tabuListSize(30), maxTries(5000)
+		graph(graph), k(70), bestSolution(graph.getNum_Nodes(), k), bestCosts(INT_MAX), currentSol(graph.getNum_Nodes(), k), tabuListSize(30), maxTries(25000)
 {
 
 }

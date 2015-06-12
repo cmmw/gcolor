@@ -22,7 +22,7 @@ const string graphviz_colors[] = {
 		"orange",
 		"turquoise",
 		"brown",
-		"black",
+		"bisque4",
 		"violet",
 		"purple",
 		"gray",
