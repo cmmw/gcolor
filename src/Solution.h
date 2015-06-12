@@ -28,6 +28,7 @@ public:
 	vector<int> getDomainValues(int nodeId);
 	void setDomainValues(int nodeId, vector<int> values);
 
+	void setK(int k);
 	int getK() const;
 	int getNum_Nodes() const;
 

@@ -86,6 +86,8 @@ Solution Algorithm2::findOptimalSolution(const Solution* solution)
 	}
 	bestCosts = evaluate();
 	LOG << "Colors: " << colorClasses.size();
+	bestSolution.setK(colorClasses.size());
+
 	int i = 0;
 	bool end = false;
 	while (!end)
@@ -161,6 +163,7 @@ void Algorithm2::move(const Move& move)
 		colorClasses.pop_back();
 		bestCosts = evaluate();
 		bestSolution = currentSol;
+		bestSolution.setK(colorClasses.size());
 		LOG << "Colors: " << colorClasses.size();
 	}
 }

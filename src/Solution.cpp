@@ -51,6 +51,11 @@ void Solution::setDomainValues(int nodeId, vector<int> values) {
 	domainValues[nodeId] = values;
 }
 
+void Solution::setK(int k)
+{
+	this->k = k;
+}
+
 int Solution::getK() const {
 	return k;
 }
