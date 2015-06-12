@@ -70,6 +70,8 @@ Graph::Graph(string fileName) : num_nodes(0), num_edges(0) {
 
 	ifs.close();
 
+	num_edges = edges.size();
+
 	cout << "Number of nodes: " << num_nodes << "\n";
 	cout << "Number of edges: " << num_edges << "\n";
 
@@ -82,6 +84,8 @@ Graph::Graph(string fileName) : num_nodes(0), num_edges(0) {
 		}
 		cout << "\n";
 	}
+
+
 }
 
 Graph::~Graph() {
