@@ -190,27 +190,37 @@ int main(int argc, char* argv[])
 		else {
 			Solution* initialSolution = new Solution(graph.getNum_Nodes(), k);
 			finalSolution = algorithm.backtrack(initialSolution, graph);
+			delete initialSolution;
+
 		}
 	} else
 	{
 
+		Algorithm algorithm;
+		Solution* initialSolution = algorithm.findOptimalSolution(graph);
+
+		LOG << "Backtracking returned a solution: k = " << initialSolution->getK();
+
 		if (time_limit != -1) {
 			Algorithm2 algorithm(graph, p, time_limit, z);
-			finalSolution = new Solution(algorithm.findOptimalSolution());
+			finalSolution = new Solution(algorithm.findOptimalSolution(initialSolution));
 			checkSolution(finalSolution, graph);
 		}
 		else if (iterationLimit != -1) {
 
+
 			Algorithm2 algorithm(graph, p, iterationLimit, z);
-			finalSolution = new Solution(algorithm.findOptimalSolution());
+			finalSolution = new Solution(algorithm.findOptimalSolution(initialSolution));
 			checkSolution(finalSolution, graph);
 		}
 		else {
-
-		Algorithm2 algorithm(graph, z);
-		finalSolution = new Solution(algorithm.findOptimalSolution());
-		checkSolution(finalSolution, graph);
+			Algorithm2 algorithm(graph, z);
+			finalSolution = new Solution(algorithm.findOptimalSolution(initialSolution));
+			checkSolution(finalSolution, graph);
 		}
+
+		delete initialSolution;
+
 	}
 
 	clock_t end = clock();
