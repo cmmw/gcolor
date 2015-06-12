@@ -55,8 +55,9 @@ Graph::Graph(string fileName) : num_nodes(0), num_edges(0) {
 				// edge line
 				unsigned int v1, v2;
 				output >> garbage >> v1 >> v2;
-				edges.push_back(Edge(v1-1, v2-1));
-
+				if(v1 == v2)
+					break;
+				edges.push_back(Edge(v1-1, v2-1));			//Ignore self-loops
 				incidentEdges[v1-1].push_back( edgeId );
 				incidentEdges[v2-1].push_back( edgeId );
 				edgeId++;
