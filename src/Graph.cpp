@@ -10,6 +10,7 @@
 #include <fstream>
 #include <sstream>
 #include <cstdlib>
+#include "Logger.h"
 
 
 
@@ -31,7 +32,7 @@ Graph::Graph(string fileName) : num_nodes(0), num_edges(0) {
 	string garbage;
 	int edgeId = 0;
 
-	cout << "Reading instance from file " << fileName << "\n";
+	LOG << "Reading instance from file " << fileName << "\n";
 
 	while (getline(ifs, line)) {
 		istringstream output(line);
@@ -72,8 +73,8 @@ Graph::Graph(string fileName) : num_nodes(0), num_edges(0) {
 
 	num_edges = edges.size();
 
-	cout << "Number of nodes: " << num_nodes << "\n";
-	cout << "Number of edges: " << num_edges << "\n";
+	LOG << "Number of nodes: " << num_nodes << "\n";
+	LOG << "Number of edges: " << num_edges << "\n";
 
 //	cout << "Incidency list:" << "\n";
 //	for( int v = 0; v < num_nodes; v++ ) {
