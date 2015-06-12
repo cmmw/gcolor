@@ -19,19 +19,19 @@ namespace graphcoloring
 {
 
 Algorithm2::Algorithm2(const Graph& graph, double tl) :
-		graph(graph), k(graph.getNum_Nodes()), bestSolution(graph.getNum_Nodes(), graph.getNum_Nodes()), bestCosts(INT_MAX), currentSol(graph.getNum_Nodes(), graph.getNum_Nodes()), tabuListSize(30), maxTries(25000), timeLimit(-1), p(5), tl(tl)
+		graph(graph), k(graph.getNum_Nodes()), bestSolution(graph.getNum_Nodes(), graph.getNum_Nodes()), bestCosts(INT_MAX), currentSol(graph.getNum_Nodes(), graph.getNum_Nodes()), tabuListSize(tl * graph.getNum_Nodes()), maxTries(25000), timeLimit(-1), p(5)
 {
 
 }
 
 Algorithm2::Algorithm2(const Graph& graph, int p, int iterationLimit, double tl) :
-		graph(graph), k(graph.getNum_Nodes()), bestSolution(graph.getNum_Nodes(), graph.getNum_Nodes()), bestCosts(INT_MAX), currentSol(graph.getNum_Nodes(), graph.getNum_Nodes()), tabuListSize(30), maxTries(iterationLimit), timeLimit(-1), p(p), tl(tl)
+		graph(graph), k(graph.getNum_Nodes()), bestSolution(graph.getNum_Nodes(), graph.getNum_Nodes()), bestCosts(INT_MAX), currentSol(graph.getNum_Nodes(), graph.getNum_Nodes()), tabuListSize(tl * graph.getNum_Nodes()), maxTries(iterationLimit), timeLimit(-1), p(p)
 {
 
 }
 
 Algorithm2::Algorithm2(const Graph& graph, int p, double timeLimit, double tl) :
-		graph(graph), k(graph.getNum_Nodes()), bestSolution(graph.getNum_Nodes(), graph.getNum_Nodes()), bestCosts(INT_MAX), currentSol(graph.getNum_Nodes(), graph.getNum_Nodes()), tabuListSize(30), maxTries(-1), timeLimit(timeLimit), p(p), tl(tl)
+		graph(graph), k(graph.getNum_Nodes()), bestSolution(graph.getNum_Nodes(), graph.getNum_Nodes()), bestCosts(INT_MAX), currentSol(graph.getNum_Nodes(), graph.getNum_Nodes()), tabuListSize(tl * graph.getNum_Nodes()), maxTries(-1), timeLimit(timeLimit), p(p)
 {
 
 }
@@ -106,6 +106,7 @@ Solution Algorithm2::findOptimalSolution(const Solution* solution)
 			{
 				tabuList.erase(tabuList.begin(), tabuList.begin() + tabuList.size() / 2);
 				tabuListSize = tabuList.size();
+				LOG << "Set tabulist size to " << tabuListSize;
 				continue;
 			}
 			_move = getBestMove(moves);
