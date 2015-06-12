@@ -49,7 +49,7 @@ Solution* Algorithm::findOptimalSolution(Graph& graph) {
 	firstRun = true;
 	new_time_limit = time_limit;
 	if (alg == 1) {
-		new_time_limit = time_limit * 0.5;
+		new_time_limit = time_limit * 0.05;
 	}
 
 	while (new_time_limit == -1 || (alg == 1 && firstRun) || TIME_PASSED < new_time_limit) {
