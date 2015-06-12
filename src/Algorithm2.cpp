@@ -86,7 +86,6 @@ Solution Algorithm2::findOptimalSolution(const Solution* solution)
 	}
 	bestCosts = evaluate();
 	LOG << "Colors: " << colorClasses.size();
-
 	int i = 0;
 	bool end = false;
 	while (!end)
@@ -103,9 +102,8 @@ Solution Algorithm2::findOptimalSolution(const Solution* solution)
 			std::vector<Move> moves = genMoves();
 			if (moves.empty())
 			{
-				tabuList.erase(tabuList.begin(), tabuList.begin() + tabuListSize / 2);
+				tabuList.erase(tabuList.begin(), tabuList.begin() + tabuList.size() / 2);
 				tabuListSize = tabuList.size();
-				std::cout << tabuListSize << std::endl;
 				continue;
 			}
 			_move = getBestMove(moves);
