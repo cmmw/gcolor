@@ -9,7 +9,7 @@
 #include "Logger.h"
 #include <algorithm>
 #include <climits>
-
+#include <time.h>
 
 #define TIME_PASSED double(clock() - begin) / CLOCKS_PER_SEC
 
