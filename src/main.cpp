@@ -22,6 +22,9 @@ int mrv = 1;
 int lcv = 1;
 int alg = 0;
 
+int iterationLimit = 50000;
+int p = 5;
+
 clock_t begin;
 double time_limit = -1;
 
@@ -49,7 +52,7 @@ int main(int argc, char* argv[])
 	if (argc < 3 || argc > 15)
 	{
 		cout << "Usage: " << argv[0] << " " << "--instanceFile <file> "
-				<< "[--k <number>] " << "[--graphVizOutFile <file>] [--mac <0/1>] [--mrv <0/1>] [--lcv <0/1>] [--timelimit <msecs>] [--alg <0/1>]" << endl;
+				<< "[--k <number>] " << "[--graphVizOutFile <file>] [--mac <0/1>] [--mrv <0/1>] [--lcv <0/1>] [--timelimit <msecs>] [--alg <0/1>] [--iterationLimit <limit>] [--randomWalkProbability <p>]" << endl;
 		return -1;
 	}
 
@@ -75,6 +78,8 @@ int main(int argc, char* argv[])
 						{ "lcv", required_argument, 0, 'l' },
 						{ "timelimit", required_argument, 0, 't' },
 						{ "alg", required_argument, 0, 'a' },
+						{ "iterationLimit", required_argument, 0, 'o' },
+						{ "randomWalkProbability", required_argument, 0, 'p' },
 						{ 0, 0, 0, 0 }
 				};
 
@@ -121,6 +126,23 @@ int main(int argc, char* argv[])
 			arg >> time_limit;
 			time_limit = time_limit/1000;
 			break;
+
+		case 'o':
+			arg.str(optarg);
+			arg >> iterationLimit;
+			if (time_limit != -1) {
+				cerr << "IterationLimit and time limit should not be set together!" << endl;
+				return 1;
+			}
+			break;
+		case 'p':
+			arg.str(optarg);
+			arg >> p;
+			if (p < 0 || p > 100) {
+				cerr << "RandomWalk probability sould lie between 0 and 100!" << endl;
+				return 1;
+			}
+			break;
 		default:
 			cerr << "?? getopt returned character code " << oct << showbase << c << " ??" << endl;
 			return 1;
@@ -161,9 +183,24 @@ int main(int argc, char* argv[])
 		}
 	} else
 	{
+
+		if (time_limit != -1) {
+			Algorithm2 algorithm(graph, p, time_limit);
+			finalSolution = new Solution(algorithm.findOptimalSolution());
+			checkSolution(finalSolution, graph);
+		}
+		else if (iterationLimit != -1) {
+
+			Algorithm2 algorithm(graph, p, iterationLimit);
+			finalSolution = new Solution(algorithm.findOptimalSolution());
+			checkSolution(finalSolution, graph);
+		}
+		else {
+
 		Algorithm2 algorithm(graph);
 		finalSolution = new Solution(algorithm.findOptimalSolution());
 		checkSolution(finalSolution, graph);
+		}
 	}
 
 	clock_t end = clock();
@@ -175,7 +212,7 @@ int main(int argc, char* argv[])
 	LOG << "Visited " << visitedNodes << " nodes";
 	LOG << "Tried " << triedColors << " colors for the nodes";
 
-	if (time_limit != -1 && time_limit < ms) {
+	if (alg == 0 && time_limit != -1 && time_limit < ms) {
 		cout << "Time limit reached without finding a solution" << endl;
 	}
 	else if (finalSolution != NULL) {

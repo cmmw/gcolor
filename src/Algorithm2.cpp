@@ -10,15 +10,30 @@
 #include <algorithm>
 #include <climits>
 
+
+#define TIME_PASSED double(clock() - begin) / CLOCKS_PER_SEC
+
+extern clock_t begin;
+
 namespace graphcoloring
 {
 
 Algorithm2::Algorithm2(const Graph& graph) :
-		graph(graph), k(70), bestSolution(graph.getNum_Nodes(), k), bestCosts(INT_MAX), currentSol(graph.getNum_Nodes(), k), tabuListSize(30), maxTries(25000)
+		graph(graph), k(graph.getNum_Nodes()), bestSolution(graph.getNum_Nodes(), graph.getNum_Nodes()), bestCosts(INT_MAX), currentSol(graph.getNum_Nodes(), graph.getNum_Nodes()), tabuListSize(30), maxTries(25000), timeLimit(-1), p(5)
 {
 
 }
 
+Algorithm2::Algorithm2(const Graph& graph, int p, int iterationLimit) :
+	graph(graph), k(graph.getNum_Nodes()), bestSolution(graph.getNum_Nodes(), graph.getNum_Nodes()), bestCosts(INT_MAX), currentSol(graph.getNum_Nodes(), graph.getNum_Nodes()), tabuListSize(30), maxTries(iterationLimit), timeLimit(-1), p(p)
+{
+
+}
+Algorithm2::Algorithm2(const Graph& graph, int p, double timeLimit)  :
+			graph(graph), k(graph.getNum_Nodes()), bestSolution(graph.getNum_Nodes(), graph.getNum_Nodes()), bestCosts(INT_MAX), currentSol(graph.getNum_Nodes(), graph.getNum_Nodes()), tabuListSize(30), maxTries(-1), timeLimit(timeLimit), p(p)
+{
+
+}
 Algorithm2::~Algorithm2()
 {
 }
@@ -59,16 +74,39 @@ Solution Algorithm2::findOptimalSolution()
 	/*Initial solution*/
 	greedyConstHeu();
 
-	unsigned int i = 0;
-	while (i < maxTries)
+	int i = 0;
+
+	bool end = false;
+	while (!end)
 	{
+
+
+
 		std::vector<Move> moves = genMoves();
-		Move _move = getBestMove(moves);
-//		Move _move = getRandomMove(moves);
+
+
+		int r = rand() % 100;
+
+		Move _move;
+
+		if (r  >= 100 - p) {
+			_move = getRandomMove();
+		}
+		else {
+			_move = getBestMove(moves);
+		}
+
 //		Move _move = getMinConflictMove();
 
 		move(_move);
 		i++;
+
+		if (maxTries == -1) {
+			end = TIME_PASSED > timeLimit;
+		}
+		else {
+			end = i > maxTries;
+		}
 	}
 
 	return bestSolution;
@@ -177,6 +215,27 @@ Algorithm2::Move Algorithm2::getMinConflictMove()
 		m.color = getMinConflictColor(m.node);
 	} while (m.color == -1);
 	return m;
+}
+
+Algorithm2::Move Algorithm2::getRandomMove()
+{
+	std::vector<int> colorClass = colorClasses.back();
+	int random_idx = 1 + (rand() % (int)(colorClass.size() - 1 + 1));
+	int nodeId = colorClass[random_idx-1];
+
+	int color = 1 + (rand() % (int)(colorClasses.size() - 1));
+
+	int delta = 0;
+	std::vector<int> neighbors = graph.getNeighbours(nodeId);
+	for (std::vector<int>::iterator neighbor = neighbors.begin(); neighbor != neighbors.end(); neighbor++)
+	{
+
+		if (color == currentSol.getColor(*neighbor))
+			delta += graph.getNeighbours(*neighbor).size();
+	}
+	delta -= neighbors.size();
+
+	return Move(nodeId, color, delta);
 }
 
 Algorithm2::Move Algorithm2::getRandomMove(const std::vector<Move>& moves)
