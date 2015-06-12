@@ -25,12 +25,12 @@ Algorithm2::Algorithm2(const Graph& graph) :
 }
 
 Algorithm2::Algorithm2(const Graph& graph, int p, int iterationLimit) :
-	graph(graph), k(graph.getNum_Nodes()), bestSolution(graph.getNum_Nodes(), graph.getNum_Nodes()), bestCosts(INT_MAX), currentSol(graph.getNum_Nodes(), graph.getNum_Nodes()), tabuListSize(30), maxTries(iterationLimit), timeLimit(-1), p(p)
+		graph(graph), k(graph.getNum_Nodes()), bestSolution(graph.getNum_Nodes(), graph.getNum_Nodes()), bestCosts(INT_MAX), currentSol(graph.getNum_Nodes(), graph.getNum_Nodes()), tabuListSize(30), maxTries(iterationLimit), timeLimit(-1), p(p)
 {
 
 }
-Algorithm2::Algorithm2(const Graph& graph, int p, double timeLimit)  :
-			graph(graph), k(graph.getNum_Nodes()), bestSolution(graph.getNum_Nodes(), graph.getNum_Nodes()), bestCosts(INT_MAX), currentSol(graph.getNum_Nodes(), graph.getNum_Nodes()), tabuListSize(30), maxTries(-1), timeLimit(timeLimit), p(p)
+Algorithm2::Algorithm2(const Graph& graph, int p, double timeLimit) :
+		graph(graph), k(graph.getNum_Nodes()), bestSolution(graph.getNum_Nodes(), graph.getNum_Nodes()), bestCosts(INT_MAX), currentSol(graph.getNum_Nodes(), graph.getNum_Nodes()), tabuListSize(30), maxTries(-1), timeLimit(timeLimit), p(p)
 {
 
 }
@@ -72,7 +72,7 @@ void Algorithm2::greedyConstHeu()
 Solution Algorithm2::findOptimalSolution(const Solution* solution)
 {
 	/*Initial solution*/
-	if(solution == NULL)
+	if (solution == NULL)
 	{
 		greedyConstHeu();
 	} else
@@ -89,10 +89,12 @@ Solution Algorithm2::findOptimalSolution(const Solution* solution)
 		int r = rand() % 100;
 		Move _move;
 
-		if (r  >= 100 - p) {
+		if (r >= 100 - p)
+		{
 			_move = getRandomMove();
 		}
-		else {
+		else
+		{
 			_move = getBestMove(moves);
 		}
 
@@ -101,10 +103,12 @@ Solution Algorithm2::findOptimalSolution(const Solution* solution)
 		move(_move);
 		i++;
 
-		if (maxTries == -1) {
+		if (maxTries == -1)
+		{
 			end = TIME_PASSED > timeLimit;
 		}
-		else {
+		else
+		{
 			end = i > maxTries;
 		}
 	}
@@ -164,43 +168,41 @@ std::vector<Algorithm2::Move> Algorithm2::genMoves(bool ignoreTabulist)
 	// http://leeds-faculty.colorado.edu/glover/TS%20-%20vignettes%20-%20coloring%20-%20Malaguti%20&%20Toth%20Extended.pdf
 	// Koennen wir aber evt. spaeter wieder aendern.
 
-	int random_idx = 1 + (rand() % (int)(colorClass.size() - 1 + 1));
-	int nodeId = colorClass[random_idx-1];
+	int random_idx = 1 + (rand() % (int) (colorClass.size() - 1 + 1));
+	int nodeId = colorClass[random_idx - 1];
 	int currentCost = evaluate();
 
 	int nodeColor = currentSol.getColor(nodeId);
 
-		for (int color = 1; (unsigned int) color < colorClasses.size(); color++)		//skip last color
+	for (int color = 1; (unsigned int) color < colorClasses.size(); color++)		//skip last color
+	{
+
+		if (color == nodeColor /*|| (!ignoreTabulist)*/) // NOTE von Felix: Was macht das ignoreTabuList genau hier?
+			continue;
+
+		int delta = 0;
+		std::vector<int> neighbors = graph.getNeighbours(nodeId);
+		for (std::vector<int>::iterator neighbor = neighbors.begin(); neighbor != neighbors.end(); neighbor++)
 		{
 
-
-			if (color == nodeColor /*|| (!ignoreTabulist)*/) // NOTE von Felix: Was macht das ignoreTabuList genau hier?
-				continue;
-
-			int delta = 0;
-			std::vector<int> neighbors = graph.getNeighbours(nodeId);
-			for (std::vector<int>::iterator neighbor = neighbors.begin(); neighbor != neighbors.end(); neighbor++)
-			{
-
-				if (color == currentSol.getColor(*neighbor))
-					delta += graph.getNeighbours(*neighbor).size();
-			}
-			delta -= neighbors.size();
-
-
-			bool aspiration_criteria = false;
-
-			if (currentCost + delta < bestCosts) {
-				bestCosts = currentCost + delta;
-				aspiration_criteria = true;
-			}
-
-
-
-			if (aspiration_criteria || moveAllowed(nodeId, color)) {
-				moves.push_back(Move(nodeId, color, delta));
-			}
+			if (color == currentSol.getColor(*neighbor))
+				delta += graph.getNeighbours(*neighbor).size();
 		}
+		delta -= neighbors.size();
+
+		bool aspiration_criteria = false;
+
+		if (currentCost + delta < bestCosts)
+		{
+			bestCosts = currentCost + delta;
+			aspiration_criteria = true;
+		}
+
+		if (aspiration_criteria || moveAllowed(nodeId, color))
+		{
+			moves.push_back(Move(nodeId, color, delta));
+		}
+	}
 	//}
 	return moves;
 }
@@ -219,10 +221,10 @@ Algorithm2::Move Algorithm2::getMinConflictMove()
 Algorithm2::Move Algorithm2::getRandomMove()
 {
 	std::vector<int> colorClass = colorClasses.back();
-	int random_idx = 1 + (rand() % (int)(colorClass.size() - 1 + 1));
-	int nodeId = colorClass[random_idx-1];
+	int random_idx = 1 + (rand() % (int) (colorClass.size() - 1 + 1));
+	int nodeId = colorClass[random_idx - 1];
 
-	int color = 1 + (rand() % (int)(colorClasses.size() - 1));
+	int color = 1 + (rand() % (int) (colorClasses.size() - 1));
 
 	int delta = 0;
 	std::vector<int> neighbors = graph.getNeighbours(nodeId);
@@ -255,7 +257,6 @@ Algorithm2::Move Algorithm2::getBestMove(const std::vector<Algorithm2::Move>& mo
 	}
 	return bestMove;
 }
-
 
 int Algorithm2::getMinConflictColor(int node)
 {
