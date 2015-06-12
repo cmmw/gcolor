@@ -29,6 +29,7 @@ Algorithm2::Algorithm2(const Graph& graph, int p, int iterationLimit, double tl)
 {
 
 }
+
 Algorithm2::Algorithm2(const Graph& graph, int p, double timeLimit, double tl) :
 		graph(graph), k(graph.getNum_Nodes()), bestSolution(graph.getNum_Nodes(), graph.getNum_Nodes()), bestCosts(INT_MAX), currentSol(graph.getNum_Nodes(), graph.getNum_Nodes()), tabuListSize(30), maxTries(-1), timeLimit(timeLimit), p(p), tl(tl)
 {
