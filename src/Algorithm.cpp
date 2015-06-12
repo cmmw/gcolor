@@ -23,6 +23,10 @@ extern int lcv;
 extern clock_t begin;
 extern double time_limit;
 
+extern int alg;
+
+bool firstRun = true;
+
 
 namespace graphcoloring {
 
@@ -39,7 +43,9 @@ Solution* Algorithm::findOptimalSolution(Graph& graph) {
 	int k = (endK - startK) / 2;
 	Solution* solution;
 	Solution* bestSolution = NULL;
-	while (time_limit == -1 || TIME_PASSED < time_limit) {
+	bool firstRun = true;
+	while (time_limit == -1 || (alg == 1 && firstRun) || TIME_PASSED < time_limit) {
+
 		LOG << "Trying with k = " << k;
 		LOG << "searching in [" << startK << ", " << endK << "]";
 		solution = backtrack(new Solution(graph.getNum_Nodes(), k), graph);
@@ -66,6 +72,7 @@ Solution* Algorithm::findOptimalSolution(Graph& graph) {
 
 		if ((endK - startK) == 1)
 			break;
+		firstRun = false;
 
 	}
 	return bestSolution;
@@ -75,7 +82,7 @@ Solution* Algorithm::findOptimalSolution(Graph& graph) {
 // Backtracking algorithm as described in the Book:
 // "Artificial Intelligence: A Modern Approach" by Stuart Russel and Peter Norvig
 Solution* Algorithm::backtrack(Solution* solution, Graph& graph) {
-	if (time_limit != -1 && TIME_PASSED > time_limit) {
+	if ((alg == 0 || !firstRun) && time_limit != -1 && TIME_PASSED > time_limit) {
 		return NULL;
 	}
 
