@@ -236,7 +236,12 @@ int main(int argc, char* argv[])
 		LOG << "Time limit reached without finding a solution";
 	}
 	else if (finalSolution != NULL) {
+		// print best k for irace
+		cout << finalSolution->getK() << endl;
+
 		finalSolution->printSolution();
+
+
 
 		if (!graphVizOutFile.empty()) {
 
