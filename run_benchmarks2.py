@@ -2,7 +2,7 @@ import subprocess
 import os
 
 program = "./gcolor"
-timelimit = "165600000"
+timelimit = "3600000"
 benchmarkdir = "benchmarks/"
 
 filelist = ['DSJC1000.1.col',
