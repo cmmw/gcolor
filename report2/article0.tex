@@ -10,6 +10,7 @@
 \usepackage{amssymb}
 \usepackage{listings}
 \usepackage{chngpage}
+\usepackage{hyperref}
 
 
 \KOMAoption{captions}{bottombeside}
@@ -39,12 +40,37 @@
 
 \section{Description of the algorithm}
 
-In our algorithm for phase 2 we used a tabu search based technique that tries to minimize conflicts when selecting neighbours. A lot of our ideas are based on \cite{malagutitabu}.
+In our algorithm for phase 2 we used a tabu search based technique that tries to minimize conflicts when selecting neighbours. A lot of our ideas are based on \cite{malagutitabu}.\\
+\\
+In a first step an initial solution is created by the algorithm from phase 1. 
+To ensure that we do not waste too much time on this task we set a time limit of 5\% of the overall time limit.
+At least one initial solution will be created which is of the same quality as created by a greedy heuristic. 
+If there is more time left the algorithm tries to improve the solution by restricting the number of allowed colors step-wise.\\
+\\
+The tabu search starts by assigning the nodes of the initial solution to the \textit{Impasse Class Neighbourhood} structure which will be explained in detail later.
+After this step every class $V_i$ contains all nodes of color $i$. 
+The algorithm then tries to remove a color by un-coloring the nodes of the last class. The goal is to empty the last class by coloring the nodes of it, which is done by putting them into other classes and assign the nodes conflicting with it to the last class. 
+To achieve this following objective value of a solution $S$ will be minimized during the search:\\
+\begin{center}
+$f(S) = \sum_{v \in V_{k+1}} \delta(v)$
+\end{center}
+where $V_{k+1}$ is the last class and $\delta(v)$ is the degree of node $v$.\\\\
+Using this objective value instead of $|V_{k+1}|$ will lead to better solutions even if the number of nodes in the last class will not decrease, because it will collect nodes with smaller degrees in class $V_{k+1}$ which are easier to color.
+Whenever the last class is emptied we set the best solution to the current one and remove the last class.
+The algorithm then continues by minimizing the conflicting nodes in the new last class.\\\\
+Cycles are avoided by putting the recoloring of a node to its last color under taboo for a certain amount of time. Furthermore the recoloring of the conflicting nodes which entered $V_{k+1}$ is made taboo to obtain a higher diversity.
+
 
 \subsection{Problem formulation}
 
 
 \subsection{Representation and Neighbourhood operator}
+
+As mentioned before we use the \textit{Impasse Class Neighbourhood} structure.
+The nodes of a $k+1$ colored solution are partitioned into $k+1$ classes where each class $V_i$ contains the nodes with color $i$.\\
+The neighbourhood operator is defined by placing (coloring) a node $n \in V_{k+1}$ to a class $V_i, i \neq (k+1)$, and moving all nodes which are neighbours of $n$ in $V_i$ into class $V_{k+1}$.
+\\
+Note that the current solution is feasible when the last class was just emptied but not necessarily during the search. At any time the colored nodes in the first $k$ classes describe a partial solution.
 
 \subsection{Evaluation of candidate solutions}
 
