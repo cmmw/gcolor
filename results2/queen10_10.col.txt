@@ -1,0 +1,27 @@
+Reading instance from file benchmarks/queen10_10.col
+
+Number of nodes: 100
+
+Number of edges: 2940
+
+Trying with k = 50
+searching in [0, 100]
+found solution (current time 0.15): 
+Trying with k = 25
+searching in [0, 50]
+found solution (current time 0.21): 
+Trying with k = 13
+searching in [0, 25]
+found solution (current time 0.24): 
+Trying with k = 7
+searching in [0, 13]
+not found
+Backtracking returned a solution: k = 13
+Colors: 13
+Colors: 12
+Checking solution
+Solution is feasible
+Took 3600.01 seconds
+Visited 613668 nodes
+Tried 765604 colors for the nodes
+12

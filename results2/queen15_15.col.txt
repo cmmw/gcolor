@@ -1,0 +1,28 @@
+Reading instance from file benchmarks/queen15_15.col
+
+Number of nodes: 225
+
+Number of edges: 10360
+
+Trying with k = 112
+searching in [0, 225]
+found solution (current time 1.38): 
+Trying with k = 56
+searching in [0, 112]
+found solution (current time 1.93): 
+Trying with k = 28
+searching in [0, 56]
+found solution (current time 2.15): 
+Trying with k = 14
+searching in [0, 28]
+not found
+Backtracking returned a solution: k = 28
+Colors: 19
+Colors: 18
+Colors: 17
+Checking solution
+Solution is feasible
+Took 3600.01 seconds
+Visited 435359 nodes
+Tried 688452 colors for the nodes
+17

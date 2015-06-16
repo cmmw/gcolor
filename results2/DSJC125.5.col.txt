@@ -1,0 +1,27 @@
+Reading instance from file benchmarks/DSJC125.5.col
+
+Number of nodes: 125
+
+Number of edges: 3891
+
+Trying with k = 62
+searching in [0, 125]
+found solution (current time 0.23): 
+Trying with k = 31
+searching in [0, 62]
+found solution (current time 0.32): 
+Trying with k = 16
+searching in [0, 31]
+not found
+Backtracking returned a solution: k = 31
+Colors: 22
+Colors: 21
+Colors: 20
+Colors: 19
+Colors: 18
+Checking solution
+Solution is feasible
+Took 3600.01 seconds
+Visited 605691 nodes
+Tried 705690 colors for the nodes
+18

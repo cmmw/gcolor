@@ -1,0 +1,19 @@
+Reading instance from file benchmarks/latin_square_10.col
+
+Number of nodes: 900
+
+Number of edges: 307350
+
+Trying with k = 450
+searching in [0, 900]
+found solution (current time 255.54): 
+Backtracking returned a solution: k = 450
+Colors: 126
+Colors: 125
+Colors: 124
+Checking solution
+Solution is feasible
+Took 3600.12 seconds
+Visited 901 nodes
+Tried 900 colors for the nodes
+124

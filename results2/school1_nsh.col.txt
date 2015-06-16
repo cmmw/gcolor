@@ -1,0 +1,35 @@
+Reading instance from file benchmarks/school1_nsh.col
+
+Number of nodes: 352
+
+Number of edges: 14612
+
+Trying with k = 176
+searching in [0, 352]
+found solution (current time 3.83): 
+Trying with k = 88
+searching in [0, 176]
+found solution (current time 5.29): 
+Trying with k = 44
+searching in [0, 88]
+found solution (current time 5.88): 
+Trying with k = 22
+searching in [0, 44]
+found solution (current time 6.12): 
+Trying with k = 11
+searching in [0, 22]
+not found
+Backtracking returned a solution: k = 22
+Colors: 20
+Colors: 19
+Colors: 18
+Colors: 17
+Colors: 16
+Colors: 15
+Colors: 14
+Checking solution
+Solution is feasible
+Took 3600.01 seconds
+Visited 237031 nodes
+Tried 374188 colors for the nodes
+14

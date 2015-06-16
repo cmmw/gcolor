@@ -1,0 +1,23 @@
+Reading instance from file benchmarks/DSJR500.5.col
+
+Number of nodes: 500
+
+Number of edges: 58862
+
+Trying with k = 250
+searching in [0, 500]
+found solution (current time 17.22): 
+Trying with k = 125
+searching in [0, 250]
+found solution (current time 20.99): 
+Trying with k = 63
+searching in [0, 125]
+not found
+Backtracking returned a solution: k = 125
+Colors: 125
+Checking solution
+Solution is feasible
+Took 3600.03 seconds
+Visited 50042 nodes
+Tried 80482 colors for the nodes
+125

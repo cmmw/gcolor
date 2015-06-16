@@ -1,0 +1,34 @@
+Reading instance from file benchmarks/DSJC250.1.col
+
+Number of nodes: 250
+
+Number of edges: 3218
+
+Trying with k = 125
+searching in [0, 250]
+found solution (current time 0.7): 
+Trying with k = 63
+searching in [0, 125]
+found solution (current time 1.02): 
+Trying with k = 32
+searching in [0, 63]
+found solution (current time 1.19): 
+Trying with k = 17
+searching in [0, 32]
+found solution (current time 1.29): 
+Trying with k = 10
+searching in [0, 17]
+found solution (current time 1.37): 
+Trying with k = 7
+searching in [0, 10]
+not found
+Backtracking returned a solution: k = 10
+Colors: 10
+Colors: 9
+Colors: 8
+Checking solution
+Solution is feasible
+Took 3600.01 seconds
+Visited 525214 nodes
+Tried 565527 colors for the nodes
+8

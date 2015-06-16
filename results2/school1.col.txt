@@ -1,0 +1,29 @@
+Reading instance from file benchmarks/school1.col
+
+Number of nodes: 385
+
+Number of edges: 19095
+
+Trying with k = 192
+searching in [0, 385]
+found solution (current time 6.05): 
+Trying with k = 96
+searching in [0, 192]
+found solution (current time 8.6): 
+Trying with k = 48
+searching in [0, 96]
+found solution (current time 9.89): 
+Trying with k = 24
+searching in [0, 48]
+found solution (current time 10.7): 
+Trying with k = 12
+searching in [0, 24]
+not found
+Backtracking returned a solution: k = 24
+Colors: 14
+Checking solution
+Solution is feasible
+Took 3600.02 seconds
+Visited 221411 nodes
+Tried 349412 colors for the nodes
+14

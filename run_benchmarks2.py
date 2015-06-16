@@ -4,6 +4,8 @@ import os
 program = "./gcolor"
 timelimit = "3600000"
 benchmarkdir = "benchmarks/"
+p= "5"
+tl = "0.4729"
 
 filelist = ['DSJC1000.1.col',
 			'DSJC1000.5.col',
@@ -34,6 +36,6 @@ for benchmark in filelist:
     
     outfile = open(benchmark+".txt", "w")
     try:
-        subprocess.call([program, "--alg", 1, "--instanceFile", benchmarkdir+benchmark, "--timelimit", timelimit], stdout=outfile)
+	    subprocess.call([program, "--alg", str(1), "--instanceFile", benchmarkdir+benchmark, "--timelimit", timelimit, "--randomWalkProbability", p, "--tl", tl ], stdout=outfile )
     finally:
         outfile.close()

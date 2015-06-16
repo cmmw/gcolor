@@ -1,0 +1,33 @@
+Reading instance from file benchmarks/DSJC500.1.col
+
+Number of nodes: 500
+
+Number of edges: 12458
+
+Trying with k = 250
+searching in [0, 500]
+found solution (current time 6.47): 
+Trying with k = 125
+searching in [0, 250]
+found solution (current time 8.98): 
+Trying with k = 63
+searching in [0, 125]
+found solution (current time 10.12): 
+Trying with k = 32
+searching in [0, 63]
+found solution (current time 10.7): 
+Trying with k = 17
+searching in [0, 32]
+found solution (current time 11.06): 
+Trying with k = 10
+searching in [0, 17]
+not found
+Backtracking returned a solution: k = 17
+Colors: 15
+Colors: 14
+Checking solution
+Solution is feasible
+Took 3600.01 seconds
+Visited 260858 nodes
+Tried 279709 colors for the nodes
+14

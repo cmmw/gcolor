@@ -1,0 +1,29 @@
+Reading instance from file benchmarks/queen16_16.col
+
+Number of nodes: 256
+
+Number of edges: 12640
+
+Trying with k = 128
+searching in [0, 256]
+found solution (current time 2.01): 
+Trying with k = 64
+searching in [0, 128]
+found solution (current time 2.8): 
+Trying with k = 32
+searching in [0, 64]
+found solution (current time 3.12): 
+Trying with k = 16
+searching in [0, 32]
+not found
+Backtracking returned a solution: k = 32
+Colors: 21
+Colors: 20
+Colors: 19
+Colors: 18
+Checking solution
+Solution is feasible
+Took 3600.01 seconds
+Visited 345370 nodes
+Tried 383321 colors for the nodes
+18
