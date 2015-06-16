@@ -1,0 +1,143 @@
+
+\documentclass[a4paper]{scrartcl}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage{amsmath}
+\usepackage[pdftex]{graphicx}
+\usepackage{listings}
+\usepackage{amssymb}
+\usepackage{listings}
+\usepackage{chngpage}
+
+
+\KOMAoption{captions}{bottombeside}
+\newcommand{\HRule}{\rule{\linewidth}{0.5mm}}
+
+
+\author{
+  Winter, Felix\\
+  \texttt{e0825516@student.tuwien.ac.at}
+  \and
+  Wagner, Christian\\
+  \texttt{e0725942@student.tuwien.ac.at}
+}
+\title{Assignment Phase 1 for Problem Solving and Search in AI 2015}
+
+
+\begin{document}
+
+\setlength{\abovedisplayskip}{0pt}
+\setlength{\belowdisplayskip}{0pt}
+
+\begingroup
+ \makeatletter
+ %\@titlepagetrue
+ \maketitle
+\endgroup
+
+\section{Description of the algorithm}
+
+For the first phase of the assignment we decided to implement a Backtracking based algorithm for the graph coloring problem on our own. Basically we applied several techniques which are described in \cite{Russell:2003:AIM:773294}.
+
+In its simplest form the algorithm just performs a recursive depth-first search to find a valid coloring for a given number of colors. However to improve the performance we included two alternative kinds of inference during the search: \emph{Simple Forward Checking} and \emph{Maintaining Arc Consistency}. While Simple Forward Checking only establishes arc-consistency for the last node which had been assigned a color, Maintaining Arc Consistency does what the name says: It keeps the whole constraint graph arc consistent during the entire search process. Therefore a lot of inferences can be performed earlier in search to prune the search tree, however at a higher computation cost during each search step.
+
+Additionally we included a variable and value selection heuristics to guide the ordering of the nodes and assigned values during search.
+To select an unassigned variable we use the \emph{minimum-remaining-values heuristic} which prefers variables which have fewer legal values left. To break ties we additionally include the \emph{degree heuristic} which select nodes with a greater number of neighbors first.
+Regarding the ordering of the colors we apply the \emph{least-constraining-value} heuristic. Values that rule out fewer choices for neighboring nodes are therefore preferred.
+
+\subsection{Solving the optimization problem}
+
+In our basic form the backtracking search we have implemented only solves the decision problem of k-color-ability. We use a binary search starting from the number of nodes divided by 2 and iteratively solve the k-decision problem to find the minimum number of k which solves the problem.
+
+\section{Description of the parameters}
+
+There is not so much to say about the parameters of our algorithm, the only alternative that we provide is in whether using the Maintaining Arc Consistency or the Simple Forward Checking approach. Besides this it is also possible to deactivate the Variable and Value Selection heuristics with the command line parameters.
+
+\section{Experimental Results and Discussion}
+
+We used several instances in DIMACS format from the web as benchmarks \footnote{http://mat.gsia.cmu.edu/COLOR/instances.html}. For all the instances we set a time limit of two hours, and ran our algorithm in 3 different variants. In the first variant we use Simple Forward Checking with the Minimum Remaining Value Heuristic and the Least Constrained Value heuristic. As a second approach we use the Maintaining Arc Consistency algorithm with the Least Constrained Value heuristic and in the third variant we use Simple Forward Checking without the Least Constrained Value heuristic. Since the Minimum Remaining Value Heuristic worked very well on small test instances we decided to always enable this heuristic (see table \ref{mrvTable}). All experiments were conducted on a Quad-core 2666 MHz Intel CPU with 8 GB RAM.
+
+\begin{table}
+  \small
+    \begin{adjustwidth}{-.5in}{-.5in}  
+        \begin{center}
+          \begin{tabular}{r | r | r | r | r | r | r }
+            \hline
+             & \multicolumn{3}{c|}{with MRV} & \multicolumn{3}{c|}{without MRV} \\
+            \hline
+Instance & Time & k & optimal &  Time & k & optimal  \\
+\hline \hline
+myciel4.col &  0.376911s & 5 & yes & 10.7155s & 5 & yes \\
+\hline
+\end{tabular}
+        \caption{Table with results for myciel4.col instance using Simple Forward Checking with and without the MRV selection heuristic. }
+        \label{mrvTable}
+        \end{center}
+    \end{adjustwidth}
+\end{table}
+
+\begin{table}
+  \small
+    \begin{adjustwidth}{-.5in}{-.5in}  
+        \begin{center}
+          \begin{tabular}{r | r | r | r | r | r | r | r | r | r}
+            \hline
+             & \multicolumn{3}{c|}{Variant 1 FC+LCV} & \multicolumn{3}{c|}{Variant 2 MAC+LCV} & \multicolumn{3}{c}{Variant 3 FC} \\
+            \hline
+Instance & Time & k & optimal &  Time & k & optimal & Time & k & optimal \\
+\hline \hline 
+david.col & 10800s & 21 & no & 10800s & 21 & no & 10800s & 21 & no  \\
+huck.col & 10800s & 19 & no & 10800s & 19 & no & 10800s & 19 & no \\
+jean.col & 330.434s & 10 & yes & 1653.28s & 10 & yes & 288.373s & 10 & yes \\
+queen5\_5.col & 0.017404s & 5 & yes & 0.058097s & 5 & yes & 0.009576s & 5 & yes  \\
+queen6\_6.col & 13.645s & 7 & yes &  44.9005s & 7 & yes  & 11.7202s & 7 & yes \\
+queen7\_7.col & 14.4932s & 7 & yes  & 62.4359s & 7 & yes & 12.5009s  & 7 & yes \\
+queen8\_12.col & 10800s & 12 & yes &  10800s & 12 & yes & 10800s & 12 & yes  \\
+queen8\_8.col & 10800s & 16  & no  & 10800s & 16 & no & 10800s & 16 & no \\
+queen9\_9.col & 10800s & 10 & yes & 10800s & 10 & yes & 10800s & 10 & yes \\
+myciel3.col &  0.005048s & 4 & yes & 0.00746s & 4 & yes  & 0.005062s & 4  & yes \\
+myciel4.col & 0.445205s &  5& yes & 0.610285s & 5 & yes & 0.375327s & 5 & yes  \\
+myciel5.col & 6973.74s & 6 & yes &10598.6s  & 6 & yes & 6187.41s & 6  & yes \\
+myciel6.col & 10800s & 11 & no & 10800s & 11  & no & 10800s & 11 & no \\
+\hline
+\end{tabular}
+        \caption{Table with results for the different variations and benchmark instances. FC: Simple Forward Checking, MAC: Maintaining Arc Consistency, LCV: Least Constrained Value heuristic }
+        \label{myTable1}
+        \end{center}
+    \end{adjustwidth}
+\end{table}
+
+\begin{table}
+  \small
+    \begin{adjustwidth}{-.5in}{-.5in}  
+ \begin{center}
+          \begin{tabular}{r | r | r | r | r | r | r | r | r | r}
+            \hline
+             & \multicolumn{3}{c|}{Variant 1 FC+LCV} & \multicolumn{3}{c|}{Variant 2 MAC+LCV} & \multicolumn{3}{c}{Variant 3 FC} \\
+            \hline
+Instance & Time & Nodes & Colors &  Time & Nodes & Colors & Time & Nodes & Colors \\
+\hline \hline 
+queen7\_7.col & 14.4932s & 120338 & 141638 & 62.4359s & 24691 & 45991 & 12.5009s  & 121000 & 142398 \\
+\hline
+
+\end{tabular}
+        \caption{Table with number of visited Nodes and tried colors for queen7\_7.col instance for the 3 Variants. }
+        \label{visitedTable}
+        \end{center}
+    \end{adjustwidth}
+\end{table}
+
+As it can be seen in the results of our experiments which are shown in table \ref{myTable1} all variants retrieve the same k for all instances and only differ in their running time. Therefore Simple Forward Checking without the use of the Least Constrained Value Selection seems to be the most efficient variant. Maintaining Arc Consistency and the Least Constrained value heuristic examine fewer nodes in most of the cases (see table \ref{visitedTable}), however the additional overhead which is needed to calculate all the inferences takes too much time and does not seem to pay off in our experiments.
+
+%'david.col', 'huck.col', 'jean.col', 'queen5_5.col', 'queen6_6.col', 'queen7_7.col', 'queen8_12.col', 'queen8_8.col', 'queen9_9.col', 'myciel3.col', 'myciel4.col', 'myciel5.col', 'myciel6.col']
+
+
+
+\bibliographystyle{plain}
+\bibliography{literature0}
+
+\end{document}
+
+
