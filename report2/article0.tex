@@ -40,47 +40,68 @@
 
 \section{Description of the algorithm}
 
-In our algorithm for phase 2 we used a tabu search based technique that tries to minimize conflicts when selecting neighbours. A lot of our ideas are based on \cite{malagutitabu}.\\
-\\
-In a first step an initial solution is created by the algorithm from phase 1. 
-To ensure that we do not waste too much time on this task we set a time limit of 5\% of the overall time limit.
-At least one initial solution will be created which is of the same quality as created by a greedy heuristic. 
-If there is more time left the algorithm tries to improve the solution by restricting the number of allowed colors step-wise.\\
-\\
-The tabu search starts by assigning the nodes of the initial solution to the \textit{Impasse Class Neighbourhood} structure which will be explained in detail later.
-After this step every class $V_i$ contains all nodes of color $i$. 
-The algorithm then tries to remove a color by un-coloring the nodes of the last class. The goal is to empty the last class by coloring the nodes of it, which is done by putting them into other classes and assign the nodes conflicting with it to the last class. 
-To achieve this following objective value of a solution $S$ will be minimized during the search:\\
-\begin{center}
-$f(S) = \sum_{v \in V_{k+1}} \delta(v)$
-\end{center}
-where $V_{k+1}$ is the last class and $\delta(v)$ is the degree of node $v$.\\\\
-Using this objective value instead of $|V_{k+1}|$ will lead to better solutions even if the number of nodes in the last class will not decrease, because it will collect nodes with smaller degrees in class $V_{k+1}$ which are easier to color.
-Whenever the last class is emptied we set the best solution to the current one and remove the last class.
-The algorithm then continues by minimizing the conflicting nodes in the new last class.\\\\
-Cycles are avoided by putting the recoloring of a node to its last color under taboo for a certain amount of time. Furthermore the recoloring of the conflicting nodes which entered $V_{k+1}$ is made taboo to obtain a higher diversity.
+In our algorithm for phase 2 we used a tabu search based technique that tries to minimize conflicts when selecting neighbours. A lot of our ideas are based on \cite{malagutitabu}.
 
+In a first step an initial valid solution is created by our backtracking based algorithm from phase 1. 
+To ensure that not too much time is wasted with this task we limit the time spent on finding an initial k to 5\% of the given overall time limit.
+However the creation of one valid initial solution will be guaranteed, which is at least as good as a greedily constructed k coloring.
+Afterwards if there is still some time left the algorithm tries to improve the generated solution by restricting the number of allowed colors step-wise and then applying backtracking search.
+
+
+A tabu search procedure then tries to minimize the number of k colors of the generated solution. Therefore we introduced the following Problem formulation and Neighbourhood operator.
 
 \subsection{Problem formulation}
 
+The tabu search starts by assigning the nodes of the initial solution to the \textit{Impasse Class Neighbourhood}\cite{malagutitabu} structure:
+Here the nodes of a $k+1$ colored solution are partitioned into $k+1$ classes where each class $V_i$ contains the nodes which have the color $i$.
 
-\subsection{Representation and Neighbourhood operator}
+The algorithm then tries to remove a color by un-coloring the nodes of the last class. The goal is to empty the last class by coloring the nodes of it, which is done by putting them into other classes and moving any conflicting nodes to the last class. 
+\subsection{Neighbourhood operator}
 
-As mentioned before we use the \textit{Impasse Class Neighbourhood} structure.
-The nodes of a $k+1$ colored solution are partitioned into $k+1$ classes where each class $V_i$ contains the nodes with color $i$.\\
 The neighbourhood operator is defined by placing (coloring) a node $n \in V_{k+1}$ to a class $V_i, i \neq (k+1)$, and moving all nodes which are neighbours of $n$ in $V_i$ into class $V_{k+1}$.
-\\
-Note that the current solution is feasible when the last class was just emptied but not necessarily during the search. At any time the colored nodes in the first $k$ classes describe a partial solution.
+
+Note that the current solution is feasible only when the last class has just been emptied but not necessarily during the search. At any time the colored nodes in the first $k$ classes describe a partial solution. To not lose any feasible solutions, the algorithm will always cache the best valid solution.
+
+To select the a good neighbour in each search step we at first choose one node fromclass $V_{k+1}$ randomly and then select a target color between 1 to k which introduces the least number of conflicts.
+We also decided to insert a Random Walk step from time to time to introduce random noise into the search. In this case the target color is also selected randomly.
 
 \subsection{Evaluation of candidate solutions}
 
+The following objective value of a solution $S$ will be minimized during the search:
+\begin{center}
+$f(S) = \sum_{v \in V_{k+1}} \delta(v)$
+\end{center}
+where $V_{k+1}$ is the last class and $\delta(v)$ is the degree of node $v$.
+Using this objective value instead of $|V_{k+1}|$ will lead to better solutions even if he number of nodes in the last class will not decrease, because it will collect nodes with smaller degrees in class $V_{k+1}$ which are easier to color.
+The algorithm then continues by minimizing the conflicting nodes in the new last class.
 
-
+Cycles are avoided by putting the recoloring of a node to make the last color tabu  for a certain amount of time. Furthermore the recoloring of the conflicting nodes which entered $V_{k+1}$ is made tabu to obtain a higher diversity.
 
 \section{Description of the parameters}
 
+Two command line-parameters take influence on our algorithm: tabu list length \emph{tl} and random walk probability \emph{p}.\emph{tl} determines the size of the used tabu list dependent on the number of nodes in the graph. For example a graph contains 40 nodes and \emph{tl=0.5} the size of the tabu list will be 20.
+The parameter \emph{p} on the other hand defines how likely a Random Walk step will be conducted during search by specifying a value between 0 and 100. If \emph{p} is 5 for example, a Random Walk step will be performed with a chance of 5\% in each step.
+
 
 \subsection{Parameter configuration}
+
+In order to find out good parameters we used the irace package\cite{lopez2011irace}. We started irace with its default parameters and defined a tuning range between 0 and 100 for \emph{p} and a range between 0.0 and 1.0 for \emph{tl}.
+With a time limit of 10 minutes per instance, we gave irace the following instance list:
+\begin{verbatim}
+DSJC1000.1.col, DSJC1000.9.col, DSJC125.5.col, DSJC250.1.col, DSJC250.9.col,
+DSJC500.5.col, DSJC1000.5.col, DSJC125.1.col, DSJC125.9.col, DSJC250.5.col,
+DSJC500.1.col, DSJC500.9.col
+\end{verbatim}
+
+Unfortunately because of timing restrictions we had to stop irace after the first iteration. The following to elite candidate configurations were provided by irace:
+
+\begin{verbatim}
+p=5   tl=0.4729
+p=2   tl=0.4315
+\end{verbatim}
+
+We decided to go with the first one in our final benchmark tests.
+
 
 \section{Experimental Results and Discussion}
 
