@@ -105,50 +105,87 @@ We decided to go with the first one in our final benchmark tests.
 
 \section{Experimental Results and Discussion}
 
+With the parameters determined by irace we did a number of benchmark runs on an Intel Xeon E5345 2.33GHz CPU with 48GB RAM. The results can be seen in Table \ref{myTable1}.
+Since most of the known instances are solved optimal the outcomes look quite promising.
 
 \begin{table}
   \small
     \begin{adjustwidth}{-.5in}{-.5in}  
         \begin{center}
+          \begin{tabular}{r | r | r }
+                      
+            \hline
+Instance & k & optimal \\
+\hline \hline 
+DSJC1000.1.col &  24 & ? \\
+DSJC1000.5.col & 113 & ?\\
+DSJC1000.9.col & 292 & ?\\
+DSJC125.1.col & 5 &  ? \\
+DSJC125.5.col & 18 & ? \\
+DSJC125.9.col & 45 & ? \\
+DSJC250.1.col & 8 & ? \\
+DSJC250.5.col & 33 & ? \\
+DSJC250.9.col & 79 & ? \\
+DSJC500.1.col & 14 & ? \\
+DSJC500.5.col & 60 & ? \\
+DSJC500.9.col & 152 & ? \\
+DSJR500.1.col & 12 & ? \\
+DSJR500.1c.col & 89 & ?\\
+DSJR500.5.col & 125 & ? \\
+latin\_square\_10.col & 124 & ? \\
+school1.col & 14 & ? \\
+school1\_nsh.col & 14 & ? \\
+queen10\_10.col & 12 & ? \\
+queen12\_12.col & 14 & ? \\
+queen14\_14.col & 16 & ? \\
+queen15\_15.col & 17 & ? \\
+queen16\_16.col & 18 & ? \\
+fpsol2.i.2.col & 30 & yes \\
+inithx.i.2.col & 31 & yes \\
+le450\_25b.col & 25 & yes \\
+miles1000.col & 42 &  yes \\
+mulsol.i.2.col & 31 & yes \\
+queen11\_11.col & 13 & no \\
+
+\hline
+          \end{tabular}
+\quad
           \begin{tabular}{r | r  }
                       
             \hline
-Instance & k   \\
+Instance & k  \\
 \hline \hline 
-DSJC1000.1.col &  24   \\
-DSJC1000.5.col & 113 \\
-DSJC1000.9.col & 292 \\
-DSJC125.1.col & 5   \\
-DSJC125.5.col & 18  \\
-DSJC125.9.col & 45  \\
-DSJC250.1.col & 8 \\
-DSJC250.5.col & 33  \\
-DSJC250.9.col & 79  \\
-DSJC500.1.col & 14  \\
-DSJC500.5.col & 60  \\
-DSJC500.9.col & 152  \\
-DSJR500.1.col & 12  \\
-DSJR500.1c.col & 89 \\
-DSJR500.5.col & 125  \\
-latin\_square\_10.col & 124 \\
-school1.col & 14  \\
-school1\_nsh.col & 14 \\
-queen10\_10.col & 12  \\
-queen12\_12.col & 14  \\
-queen14\_14.col & 16  \\
-queen15\_15.col & 17  \\
-queen16\_16.col & 18  \\
+
+DSJC500.5.col Run 1 & 60 \\
+DSJC500.5.col Run 2 & 60 \\
+DSJC500.5.col Run 3 & 60 \\
+DSJC500.5.col Run 4 & 60 \\
+DSJC500.5.col Run 5 & 60 \\
+DSJC500.5.col Run 6 & 60 \\
+DSJC500.5.col Run 7 & 60 \\
+DSJC500.5.col Run 8 & 60 \\
+DSJC500.5.col Run 9 & 60 \\
+DSJC500.5.col Run 10 & 60 \\
+DSJC500.5.col Average &  \\ 
+
+
 
 \hline
 \end{tabular}
-        \caption{Table with the algorithms results for benchmark instances, each of them conducted with a time limit of 1 hour, p=5 and tl=0.4729 }
+          
+        \caption{Table with the algorithms results for benchmark instances. All of the experiments have been conducted with p=5 and tl=0.4729. Those on the right had a time limit of 1 hour, those on the left had a time limit of 5 minutes. }
         \label{myTable1}
         \end{center}
     \end{adjustwidth}
 \end{table}
 
+To also have a look how the alogrithm performs with several runs on the same instance we did experiments for one of the larger problems for 10 consecutive times.
+The results can also be seen in Table \ref{myTable1}.
+
+
 %'david.col', 'huck.col', 'jean.col', 'queen5_5.col', 'queen6_6.col', 'queen7_7.col', 'queen8_12.col', 'queen8_8.col', 'queen9_9.col', 'myciel3.col', 'myciel4.col', 'myciel5.col', 'myciel6.col']
 
+The achieved similar outcomes can be seen as a hint on the algorithms stability. However additional experiments should be made to further investigate this property.
 
 
 
@@ -156,5 +193,14 @@ queen16\_16.col & 18  \\
 \bibliography{literature0}
 
 \end{document}
+
+
+
+
+
+
+
+
+
 
 
