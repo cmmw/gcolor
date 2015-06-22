@@ -1,0 +1,132 @@
+\documentclass{beamer}
+
+\usetheme{Warsaw}
+\usepackage{tikz}
+
+\title[Solving the Graph Coloring Problem] % (optional, only for long titles)
+{Problem Solving and Search in AI: Solving the Graph Coloring
+Problem}
+\author{Christian Wagner, Felix Winter}
+
+\institute
+{
+  TU Wien  
+}
+\date[SS 2015] % (optional)
+{Problem Solving and Search in AI: SS 2015}
+\subject{Informatik}
+
+\def\MLine#1{\par\hspace*{-\leftmargin}\parbox{\textwidth}{\[#1\]}}
+
+\begin{document}
+\section{Title}
+  \frame{\titlepage}
+
+
+\section{Introduction}
+
+  \begin{frame}
+    \frametitle{Overview}
+
+    \begin{enumerate}
+      \item Introduction
+      \item Principles of Constraint Optimization Problems
+      \begin{itemize}
+        \item COP Basics
+        \item Solving Techniques
+        \begin{itemize}
+          \item{Systematic Search}
+          \item{Local Search}
+          \item{Hybrid Solvers}
+        \end{itemize}
+      \end{itemize}
+        \item{A Parallel Hybrid Approach for the Examination Time Tabling problem}
+         \begin{itemize}
+           \item{Problem formulation}
+           \item{Iterated Dynamic Search Solver}
+           \item{Solving Large ETP}
+         \end{itemize}
+       \item Summary
+
+    \end{enumerate}
+  \end{frame}
+
+
+  \begin{frame}
+    \frametitle{What are Constraint Optimization Problems?}
+
+      \begin{exampleblock}{Definition}
+        \emph{Constraint Optimization is the process of optimizing an objective function with respect to some variables in the presence of constraints}
+      \end{exampleblock}
+
+      \begin{itemize}
+        \item{Variety of practical problems can be modelled and solved}
+        \item{Very successful in the fields of scheduling, timetabling, routing, computational biology, ...}
+      \end{itemize}
+  \end{frame}
+
+
+\begin{frame}[allowframebreaks]
+  \frametitle<presentation>{References}    
+  \begin{thebibliography}{10}    
+  \beamertemplatebookbibitems
+  \bibitem{ArtModern}
+    Stuart Russel, Peter Norvig.
+    \newblock {\em Artificial Intelligence. A Modern Approach}.
+    \newblock Pearson Education, 2010.
+
+  \beamertemplatearticlebibitems
+  \bibitem{ParallelHybridPhd}
+    Ali Ahmed Altohami Hmer.
+    \newblock A Parallel Hybrid Metaheuristic Approach for Timetabling
+    \newblock {\em Phd Thesis in Computer Science. University of Regina. 2013}.
+
+  \bibitem{Sudoku}
+    Rhydian Lewis.
+    \newblock Metaheuristics can solve sudoku puzzles.
+    \newblock {\em J. Heuristics, 13(4):387–401, 2007.}.
+
+ 
+
+ \bibitem{Luca}
+    Luca Di Gaspero.
+    \newblock Modeling and Solving Constrained Optimization Problems
+    \newblock {\em Slides from the Lecture ``Modeling and Solving Constrained Optimization Problems'' TU Wien SS 11.}.
+
+  \bibitem{Poole}
+    David Poole and Alan Mackworth.
+    \newblock Solving CSPs Using Search
+    \newblock {\em \url{http://artint.info/html/ArtInt_78.html} Retrieved 20th November 2013.}.
+ 
+  \bibitem{Bartak}
+    Barták, Roman.
+    \newblock Constraint programming: In pursuit of the holy grail.
+    \newblock {\em Proceedings of WDS99 (invited lecture), Prague, June. 1999}
+
+
+  \end{thebibliography}
+\end{frame}
+
+\begin{frame}
+\frametitle{Questions}
+\centerline{Any questions?}
+\end{frame}
+
+
+\end{document}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
