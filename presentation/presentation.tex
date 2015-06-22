@@ -113,12 +113,11 @@ Problem}
             \item Problem formulation
             \item Neighbourhood operator
             \item Evaluation function
-            \item Parameters
             \item Constructing an initial solution
           \end{itemize}
         \item Experiments
           \begin{itemize}
-          \item Parameter configuration with irace
+          \item Parameter configuration
           \item Best results
           \end{itemize}
 
@@ -130,51 +129,159 @@ Problem}
 \begin{frame}
     \frametitle{Algorithm description}
 
+    \begin{itemize}
+    \item Metaheuristic approach based on Tabu Search and Min-conflicts heuristic
+    \item General Idea: Divide nodes into color classes and try to remove classes step by step
+    \item Initial solution is constructed by algorithm from phase 1
+    \end{itemize}
 
   \end{frame}
 
 \subsection{Used Methods}
 \begin{frame}
     \frametitle{Problem formulation}
-
-
+\begin{itemize}
+  \item Problem formulation is based on the paper Enrico Malaguti and Paolo Toth. Tabu search for the graph coloring problem.
+    \item Nodes are divided into a number of color classes
+    \end{itemize}
+         \begin{block}{Definition}
+           undirected graph $G = (V,E)$ \\
+           solution $S$ is a partition of $V$ in $k+1$ color classes 
+           $\lbrace V_1, V_2, V_3, ... V_{k+1} \rbrace$ \\
+           all classes $V_i$ except the last one have to be a stable set
+       \end{block}
+    
   \end{frame}
 
 \begin{frame}
     \frametitle{Neighbourhood operator}
 
+    \begin{itemize}
+    \item $V_{1..k}$ constitute a partial feasible $k$ coloring
+    \item Making $V_{k+1}$ empty gives a complete feasible $k$ coloring
+    \end{itemize}
+
+       \begin{block}{Neighbourhood operator}
+           choose an uncolored vertex $v \in V_{k+1}$ \\
+           assign $v$ to different color class $h$\\
+           move to class $k+1$ all vertices $v'$ from $h$ that are adjacent to $v$
+       \end{block}
+
+       \begin{itemize}
+     \item the uncolored vertex $v$ is chosen randomly
+     \item color class $h$ is chosen so that the number of generated conflicts is minimized
+     \item From time to time $h$ is chosen randomly to introduce random noise (Random Walk)
+     \item a tabu list stores the vertix pairs $(v,h)$ to cycles
+
+
+       \end{itemize}
 
 \end{frame}
 
 \begin{frame}
     \frametitle{Evaluation function}
 
+    \begin{itemize}
+    \item simple variant could just count the number of nodes in class $V_{k+1}$
+    \item Better: minimize the global degree of the uncolored vertices
+    \end{itemize}
+
+    \begin{block}{Evaluation function}
+      $f(S) = \sum\limits_{v \in V_{k+1}} \delta(v)$\\
+      where $\delta$ represents the degree of vertex $v$
+
+      \end{block}
 
   \end{frame}
 
 \begin{frame}
-    \frametitle{Parameters}
-
-
-\end{frame}
-
-\begin{frame}
-    \frametitle{Constructing an initial solution}
-
-
+  \frametitle{Constructing an initial solution}
+  \begin{itemize}
+  \item initial solution has to be feasible for the algorithm to work
+  \item we generate it by applying our algorithm from phase 1
+  \item time for generating initial solution is 5\% of overall time limit
+  \item first k has to be found anyway
+\end{itemize}
   \end{frame}
 
 \subsection{Experiments}
 
 \begin{frame}
-    \frametitle{Parameter configuration with irace}
+    \frametitle{Parameter configuration}
+    \begin{itemize}
+    \item 2 main parameters are used in our algorithm:
+      \begin{itemize}
+      \item probability for Random Walk
+      \item length of tabu list relative to the number of nodes
+      \end{itemize}
+
+      
+  \item We used irace 1.06.997 with its default configuration and all of the DJC*.col instances.
+  \item time for one run was limited to 20 minutes
+  \item because of the limited time we unfortunately had to cancel after 2 days and the first iteration.
+
+  \item Elite candidates:
+    \begin{itemize}
+    \item p=5 tl=0.4729
+    \item p=2 tl=0.4315
+
+    \end{itemize}
 
 
+    \end{itemize} 
   \end{frame}
 
 \begin{frame}
     \frametitle{Best results}
 
+
+  \begin{columns}
+    \begin{column}{0.48\textwidth}
+       \begin{table}
+   \begin{tabular}{r | r | r |}
+       
+       Instance & k & optimal \\
+       \hline 
+       DSJC250.5.col & 33 & ? \\
+       DSJC250.9.col & 79 & ? \\
+       DSJC500.1.col & 14 & ? \\
+       DSJC500.5.col & 60 & ? \\
+       DSJC500.9.col & 152 & ? \\
+       DSJR500.1.col & 12 & ? \\
+       DSJR500.1c.col & 89 & ? \\
+       DSJR500.5.col & 125 & ? \\
+       latin\_square\_10.col & 124 & ? \\
+       school1.col & 14 & ? \\
+       school1\_nsh.col & 14 & ? \\
+       \hline
+   \end{tabular}
+     \end{table}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \begin{table}
+   \begin{tabular}{r | r | r }
+       
+       Instance & k & optimal \\
+       \hline 
+       queen10\_10.col & 12 & ? \\
+       queen12\_12.col & 14 & ? \\
+       queen14\_14.col & 16 & ? \\
+       queen15\_15.col & 17 & ? \\
+       queen16\_16.col & 18 & ? \\
+       fpsol2.i.2.col & 30 & yes \\
+       inithx.i.2.col & 31 & yes \\
+       le450\_25b.col & 25 & yes \\
+       miles1000.col & 42 &  yes \\
+       mulsol.i.2.col & 31 & yes \\
+       queen11\_11.col & 13 & no \\
+       \hline
+     \end{tabular}
+      
+     \end{table}
+
+    \end{column}
+\end{columns}
+   
 
   \end{frame}
 
@@ -200,42 +307,20 @@ Problem}
       %% \end{itemize}
 
 
-\begin{frame}[allowframebreaks]
+\begin{frame}
   \frametitle<presentation>{References}    
-  \begin{thebibliography}{10}    
-  \beamertemplatebookbibitems
-  \bibitem{ArtModern}
-    Stuart Russel, Peter Norvig.
-    \newblock {\em Artificial Intelligence. A Modern Approach}.
-    \newblock Pearson Education, 2010.
-
+  \begin{thebibliography}{2}
+    
   \beamertemplatearticlebibitems
-  \bibitem{ParallelHybridPhd}
-    Ali Ahmed Altohami Hmer.
-    \newblock A Parallel Hybrid Metaheuristic Approach for Timetabling
-    \newblock {\em Phd Thesis in Computer Science. University of Regina. 2013}.
+  \bibitem{Tabu Search}
+    Malaguti, Enrico and Toth, Paolo
+    \newblock Tabu Search for the Graph Coloring Problem (extended)
 
-  \bibitem{Sudoku}
-    Rhydian Lewis.
-    \newblock Metaheuristics can solve sudoku puzzles.
-    \newblock {\em J. Heuristics, 13(4):387–401, 2007.}.
 
- 
-
- \bibitem{Luca}
-    Luca Di Gaspero.
-    \newblock Modeling and Solving Constrained Optimization Problems
-    \newblock {\em Slides from the Lecture ``Modeling and Solving Constrained Optimization Problems'' TU Wien SS 11.}.
-
-  \bibitem{Poole}
-    David Poole and Alan Mackworth.
-    \newblock Solving CSPs Using Search
-    \newblock {\em \url{http://artint.info/html/ArtInt_78.html} Retrieved 20th November 2013.}.
- 
-  \bibitem{Bartak}
-    Barták, Roman.
-    \newblock Constraint programming: In pursuit of the holy grail.
-    \newblock {\em Proceedings of WDS99 (invited lecture), Prague, June. 1999}
+  \bibitem{irace}
+    L{\'o}pez-Ib{\'a}nez, Manuel and Dubois-Lacoste, J{\'e}r{\'e}mie and St{\"u}tzle, Thomas and Birattari, Mauro
+    \newblock The irace package, iterated race for automatic algorithm configuration
+    \newblock 2011
 
 
   \end{thebibliography}
