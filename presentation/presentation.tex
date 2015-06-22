@@ -32,7 +32,6 @@ Problem}
   Short explanation on the gcoloring problem
   \end{frame}
 
-
 \section{Phase 1}
   \begin{frame}
     \frametitle{Overview of phase 1}
@@ -59,47 +58,122 @@ Problem}
 
   \begin{frame}
     \frametitle{Algorithm description}
+    \begin{itemize}
+    \item{Backtracking based algorithm}
+    \item{Variables: Nodes of the graph}
+    \item{Domains: Colors \{1 \dots k\}}
+    \item{Constraints: $diff(n_1, n_2),  \forall (n_1, n_2) \in E$}
+    \item{Various optimization techniques}
+    \end{itemize}
 
 
   \end{frame}
 \subsection{Used Methods}
 \begin{frame}
     \frametitle{Inference techniques}
-
+	Two different inference techniques:
+	\begin{itemize}
+	\item{Simple Forward Checking [FC]}	
+		\begin{itemize}	
+		\item{Establish arc-consistency between last assigned node and its neighbours}
+		\end{itemize}
+	\item{Maintain Arc Consistency [MAC]}
+	\begin{itemize}	
+		\item{Keep whole constraint graph consistent during the search}
+		\end{itemize}
+	\end{itemize}
 
   \end{frame}
 
 \begin{frame}
     \frametitle{Variable- and Value-Selection heuristics}
-
-
+	Variable selection heuristic:
+	\begin{itemize}
+	\item{Minimum Remaining Value [MRV]}
+	\end{itemize}
+	Value selection heuristic:
+	\begin{itemize}
+	\item{Least Constrained Value [LCV]}
+	\end{itemize}
   \end{frame}
 
 \begin{frame}
     \frametitle{Solving the optimization problem}
-
-
-  \end{frame}
+    \begin{itemize}
+    \item{Only solves CSP}
+	\item{Binary search by adapting k to find optimum}
+	\end{itemize}
+	\begin{block}{Binary search}
+	$k = |V|/2, k_0 = 0, k_1 = |V|$\\
+	$(k_0,k_1]$ is the range where the optimal solution lies\\
+	If a k-colored solution exists\\
+	\quad $step = -\frac{k_1 - k}{2},k_1 = k$\\
+	else\\
+	\quad $step = \frac{k - k_0}{2}, k_0 = k$\\
+	$k = k + step$\\
+	stop if length of range is 1
+	\end{block}
+   \end{frame}
 \subsection{Experiments}
 \begin{frame}
     \frametitle{Used Benchmarks}
-
-
+	
+    \begin{itemize}
+    \item{Three different variants of the algorithm}
+        \begin{itemize}
+        \item{FC + LCV}
+        \item{MAC + LCV}
+        \item{FC}
+        \end{itemize}
+    \item{MRV always used as it reduces running time significant}
+        \begin{itemize}
+        \item{e.g. on instance myciel4.col MRV faster by factor 10}
+		\end{itemize}    
+	\item{Tested on Quad-core 2.6 GHz, 8 GB RAM}
+	\end{itemize}
+	%server leistung, algo varianten etc.
   \end{frame}
 
 
 \begin{frame}
     \frametitle{Finding out the best variant}
 
+\begin{table}
+  \tiny
+        \begin{center}
+          \begin{tabular}{r | r | r | r | r | r | r | r | r | r}
+            \hline
+             & \multicolumn{3}{c|}{Variant 1 FC+LCV} & \multicolumn{3}{c|}{Variant 2 MAC+LCV} & \multicolumn{3}{c}{Variant 3 FC} \\
+            \hline
+Instance & Time & k & optimal &  Time & k & optimal & Time & k & optimal \\
+\hline \hline 
+david.col & 10800s & 21 & no & 10800s & 21 & no & 10800s & 21 & no  \\
+huck.col & 10800s & 19 & no & 10800s & 19 & no & 10800s & 19 & no \\
+jean.col & 330.434s & 10 & yes & 1653.28s & 10 & yes & 288.373s & 10 & yes \\
+queen5\_5.col & 0.017404s & 5 & yes & 0.058097s & 5 & yes & 0.009576s & 5 & yes  \\
+queen6\_6.col & 13.645s & 7 & yes &  44.9005s & 7 & yes  & 11.7202s & 7 & yes \\
+queen7\_7.col & 14.4932s & 7 & yes  & 62.4359s & 7 & yes & 12.5009s  & 7 & yes \\
+queen8\_12.col & 10800s & 12 & yes &  10800s & 12 & yes & 10800s & 12 & yes  \\
+queen8\_8.col & 10800s & 16  & no  & 10800s & 16 & no & 10800s & 16 & no \\
+queen9\_9.col & 10800s & 10 & yes & 10800s & 10 & yes & 10800s & 10 & yes \\
+myciel3.col &  0.005048s & 4 & yes & 0.00746s & 4 & yes  & 0.005062s & 4  & yes \\
+myciel4.col & 0.445205s &  5& yes & 0.610285s & 5 & yes & 0.375327s & 5 & yes  \\
+myciel5.col & 6973.74s & 6 & yes &10598.6s  & 6 & yes & 6187.41s & 6  & yes \\
+myciel6.col & 10800s & 11 & no & 10800s & 11  & no & 10800s & 11 & no \\
+\hline
+\end{tabular}
+        \caption{Table with results for the different variations and benchmark instances. FC: Simple Forward Checking, MAC: Maintaining Arc Consistency, LCV: Least Constrained Value heuristic }
+        \label{myTable1}
+        \end{center}
+\end{table}
 
 \end{frame}
 
 \begin{frame}
     \frametitle{Best results}
-
+	
 
   \end{frame}
-
 
 
 \section{Phase 2}
