@@ -2,7 +2,7 @@ import subprocess
 import os
 
 program = "./gcolor"
-timelimit = "1200000"
+timelimit = "3600000"
 benchmarkdir = "benchmarks/"
 p= "5"
 tl = "0.4729"

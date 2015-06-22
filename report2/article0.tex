@@ -43,12 +43,12 @@
 In our algorithm for phase 2 we used a tabu search based technique that tries to minimize conflicts when selecting neighbours. A lot of our ideas are based on \cite{malagutitabu}.
 
 In a first step an initial valid solution is created by our backtracking based algorithm from phase 1. 
-To ensure that not too much time is wasted with this task we limit the time spent on finding an initial k to 5\% of the given overall time limit.
-However the creation of one valid initial solution will be guaranteed, which is at least as good as a greedily constructed k coloring.
+To ensure that not too much time is wasted with this task we limit the time spent on finding an initial \emph{n} coloring to 5\% of the given overall time limit.
+However the creation of one valid initial solution will be guaranteed, which is at least as good as a greedily constructed \emph{n} coloring.
 Afterwards if there is still some time left the algorithm tries to improve the generated solution by restricting the number of allowed colors step-wise and then applying backtracking search.
 
 
-A tabu search procedure then tries to minimize the number of k colors of the generated solution. Therefore we introduced the following Problem formulation and Neighbourhood operator.
+A tabu search procedure then tries to minimize the number of \emph{n} colors of the generated solution. Therefore we introduced the following Problem formulation and Neighbourhood operator.
 
 \subsection{Problem formulation}
 
@@ -62,7 +62,7 @@ The neighbourhood operator is defined by placing (coloring) a node $n \in V_{k+1
 
 Note that the current solution is feasible only when the last class has just been emptied but not necessarily during the search. At any time the colored nodes in the first $k$ classes describe a partial solution. To not lose any feasible solutions, the algorithm will always cache the best valid solution.
 
-To select the a good neighbour in each search step we at first choose one node fromclass $V_{k+1}$ randomly and then select a target color between 1 to k which introduces the least number of conflicts.
+To select a good neighbour in each search step we at first choose one node from class $V_{k+1}$ randomly and then select a target color between 1 to k which introduces the least number of conflicts.
 We also decided to insert a Random Walk step from time to time to introduce random noise into the search. In this case the target color is also selected randomly.
 
 \subsection{Evaluation of candidate solutions}
@@ -75,7 +75,7 @@ where $V_{k+1}$ is the last class and $\delta(v)$ is the degree of node $v$.
 Using this objective value instead of $|V_{k+1}|$ will lead to better solutions even if he number of nodes in the last class will not decrease, because it will collect nodes with smaller degrees in class $V_{k+1}$ which are easier to color.
 The algorithm then continues by minimizing the conflicting nodes in the new last class.
 
-Cycles are avoided by putting the recoloring of a node to make the last color tabu  for a certain amount of time. Furthermore the recoloring of the conflicting nodes which entered $V_{k+1}$ is made tabu to obtain a higher diversity.
+Cycles are avoided by making the previous color of the selected node tabu for a certain amount of time. Furthermore the recoloring of the conflicting nodes which entered $V_{k+1}$ is made tabu to obtain a higher diversity.
 
 \section{Description of the parameters}
 
@@ -93,7 +93,7 @@ DSJC500.5.col, DSJC1000.5.col, DSJC125.1.col, DSJC125.9.col, DSJC250.5.col,
 DSJC500.1.col, DSJC500.9.col
 \end{verbatim}
 
-Unfortunately because of timing restrictions we had to stop irace after the first iteration. The following to elite candidate configurations were provided by irace:
+Unfortunately because of timing restrictions we had to stop irace after the first iteration. The following two elite candidate configurations were provided by irace:
 
 \begin{verbatim}
 p=5   tl=0.4729
@@ -156,17 +156,17 @@ queen11\_11.col & 13 & no \\
 Instance & k  \\
 \hline \hline 
 
-DSJC500.5.col Run 1 & 60 \\
-DSJC500.5.col Run 2 & 60 \\
-DSJC500.5.col Run 3 & 60 \\
-DSJC500.5.col Run 4 & 60 \\
-DSJC500.5.col Run 5 & 60 \\
-DSJC500.5.col Run 6 & 60 \\
-DSJC500.5.col Run 7 & 60 \\
-DSJC500.5.col Run 8 & 60 \\
-DSJC500.5.col Run 9 & 60 \\
-DSJC500.5.col Run 10 & 60 \\
-DSJC500.5.col Average &  \\ 
+DSJC500.5.col Run 1 & 63 \\
+DSJC500.5.col Run 2 & 62 \\
+DSJC500.5.col Run 3 & 62 \\
+DSJC500.5.col Run 4 & 63 \\
+DSJC500.5.col Run 5 & 62 \\
+DSJC500.5.col Run 6 & 62 \\
+DSJC500.5.col Run 7 & 62 \\
+DSJC500.5.col Run 8 & 62 \\
+DSJC500.5.col Run 9 & 62 \\
+DSJC500.5.col Run 10 & 61 \\
+DSJC500.5.col Average & 62.1 \\ 
 
 
 
