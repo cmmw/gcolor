@@ -79,7 +79,7 @@ Solution* Algorithm::findOptimalSolution(Graph& graph) {
 			startK = k;
 			k += step;
 		}
-
+//		k = startK + ((endK - startK) / 2);		//simplified
 		if ((endK - startK) == 1)
 			break;
 

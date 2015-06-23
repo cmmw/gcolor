@@ -106,10 +106,10 @@ Problem}
 	$k = |V|/2, k_0 = 0, k_1 = |V|$\\
 	$(k_0,k_1]$ is the range where the optimal solution lies\\
 	If a k-colored solution exists\\
-	\quad $step = -\frac{k_1 - k}{2},k_1 = k$\\
+	\quad $k_1 = k$\\
 	else\\
-	\quad $step = \frac{k - k_0}{2}, k_0 = k$\\
-	$k = k + step$\\
+	\quad $k_0 = k$\\
+	$k = k_0 + \frac{k_1 - k_0}{2}$\\
 	stop if length of range is 1
 	\end{block}
    \end{frame}
