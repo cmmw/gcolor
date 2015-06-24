@@ -199,7 +199,7 @@ int main(int argc, char* argv[])
 		Algorithm algorithm;
 		Solution* initialSolution = algorithm.findOptimalSolution(graph);
 
-		LOG << "Backtracking returned a solution: k = " << initialSolution->getK();
+		//LOG << "Backtracking returned a solution: k = " << initialSolution->getK();
 
 		if (time_limit != -1) {
 			Algorithm2 algorithm(graph, p, time_limit, z);
