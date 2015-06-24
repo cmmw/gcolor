@@ -189,7 +189,7 @@ myciel6.col & 10800s & 11 & no & 10800s & 11  & no & 10800s & 11 & no \\
    \includegraphics[width=0.475\textwidth]{myciel3.png}
    \hfill
    \includegraphics[width=0.475\textwidth]{queen5_5.png}
-   \caption{The left side shows the optimal solution for myciel3.col and the right side for queen5\_5.png}
+   \caption{The left side shows the optimal solution for myciel3.col (k=4) and the right side for queen5\_5.col (k=5)}
    \label{figure1}
 \end{figure}
 
@@ -213,6 +213,7 @@ myciel6.col & 10800s & 11 & no & 10800s & 11  & no & 10800s & 11 & no \\
           \begin{itemize}
           \item Parameter configuration
           \item Best results
+          \item Visualization of solutions
           \end{itemize}
 
 
@@ -226,6 +227,7 @@ myciel6.col & 10800s & 11 & no & 10800s & 11  & no & 10800s & 11 & no \\
     \begin{itemize}
     \item Metaheuristic approach based on Tabu Search and Min-conflicts heuristic
     \item General Idea: Divide nodes into color classes and try to remove classes step by step
+    \item Colors are swapped between classes with Min-conflicts or Random Walk
     \item Initial solution is constructed by algorithm from phase 1
     \end{itemize}
 
@@ -235,7 +237,8 @@ myciel6.col & 10800s & 11 & no & 10800s & 11  & no & 10800s & 11 & no \\
 \begin{frame}
     \frametitle{Problem formulation}
 \begin{itemize}
-  \item Problem formulation is based on the paper Enrico Malaguti and Paolo Toth. Tabu search for the graph coloring problem.
+\item Problem formulation is based on the paper:\\
+  \emph{Enrico Malaguti and Paolo Toth. Tabu search for the graph coloring problem.}
     \item Nodes are divided into a number of color classes
     \end{itemize}
          \begin{block}{Definition}
@@ -255,7 +258,7 @@ myciel6.col & 10800s & 11 & no & 10800s & 11  & no & 10800s & 11 & no \\
     \item Making $V_{k+1}$ empty gives a complete feasible $k$ coloring
     \end{itemize}
 
-       \begin{block}{Neighbourhood operator}
+       \begin{block}{Definition}
            choose an uncolored vertex $v \in V_{k+1}$ \\
            assign $v$ to different color class $h$\\
            move to class $k+1$ all vertices $v'$ from $h$ that are adjacent to $v$
@@ -265,7 +268,7 @@ myciel6.col & 10800s & 11 & no & 10800s & 11  & no & 10800s & 11 & no \\
      \item the uncolored vertex $v$ is chosen randomly
      \item color class $h$ is chosen so that the number of generated conflicts is minimized
      \item From time to time $h$ is chosen randomly to introduce random noise (Random Walk)
-     \item a tabu list stores the vertix pairs $(v,h)$ to cycles
+     \item a tabu list stores the vertex pairs $(v,h)$ to avoid cycles
 
 
        \end{itemize}
@@ -276,11 +279,11 @@ myciel6.col & 10800s & 11 & no & 10800s & 11  & no & 10800s & 11 & no \\
     \frametitle{Evaluation function}
 
     \begin{itemize}
-    \item simple variant could just count the number of nodes in class $V_{k+1}$
+    \item simple variant: just count the number of nodes in class $V_{k+1}$
     \item Better: minimize the global degree of the uncolored vertices
     \end{itemize}
 
-    \begin{block}{Evaluation function}
+    \begin{block}{Definition}
       $f(S) = \sum\limits_{v \in V_{k+1}} \delta(v)$\\
       where $\delta$ represents the degree of vertex $v$
 
@@ -294,7 +297,7 @@ myciel6.col & 10800s & 11 & no & 10800s & 11  & no & 10800s & 11 & no \\
   \item initial solution has to be feasible for the algorithm to work
   \item we generate it by applying our algorithm from phase 1
   \item time for generating initial solution is 5\% of overall time limit
-  \item first k has to be found anyway
+  \item first k has to be found in any case
 \end{itemize}
   \end{frame}
 
@@ -310,9 +313,9 @@ myciel6.col & 10800s & 11 & no & 10800s & 11  & no & 10800s & 11 & no \\
       \end{itemize}
 
       
-  \item We used irace 1.06.997 with its default configuration and all of the DJC*.col instances.
+  \item we used irace 1.06.997 with its default configuration and all of the DJC*.col instances
   \item time for one run was limited to 20 minutes
-  \item because of the limited time we unfortunately had to cancel after 2 days and the first iteration.
+  \item because of the limited time we unfortunately had to cancel after 2 days after the first iteration
 
   \item Elite candidates:
     \begin{itemize}
@@ -377,16 +380,67 @@ myciel6.col & 10800s & 11 & no & 10800s & 11  & no & 10800s & 11 & no \\
 \end{columns}
    
 
+\end{frame}
+
+\begin{frame}
+    \frametitle{Best results II}
+
+       \begin{table}
+         \begin{tabular}{r | r  }
+
+           \hline
+           Instance & k  \\
+           \hline \hline 
+
+           DSJC500.5.col Run 1 & 63 \\
+           DSJC500.5.col Run 2 & 62 \\
+           DSJC500.5.col Run 3 & 62 \\
+           DSJC500.5.col Run 4 & 63 \\
+           DSJC500.5.col Run 5 & 62 \\
+           DSJC500.5.col Run 6 & 62 \\
+           DSJC500.5.col Run 7 & 62 \\
+           DSJC500.5.col Run 8 & 62 \\
+           DSJC500.5.col Run 9 & 62 \\
+           DSJC500.5.col Run 10 & 61 \\
+           DSJC500.5.col Average & 62.1 \\ 
+           \hline
+         \end{tabular}
+       \end{table}
+
+   
+
   \end{frame}
 
 
+
+\begin{frame}
+  \frametitle{Visualization of Solutions}
+
+  \begin{figure}
+    \footnotesize
+   \includegraphics[width=0.475\textwidth]{homer.png}
+   \hfill
+   \includegraphics[width=0.475\textwidth]{DSJR500.png}
+   \caption{The left side shows the optimal solution for homer.col (k=13) and the right side for DSJR500.1.col (k=12)}
+   \label{figure1}
+\end{figure}
+
+\end{frame}
 
 % slides for phase 2 insert here
 
   \section{Conclusion}
   \begin{frame}
-    \frametitle{Conclusion and Discussion}
+    \frametitle{Conclusion}
 
+    \begin{itemize}
+    \item CP based approach only sufficient for smaller graphs
+    \item metaheuristic hybrid works time efficient also for bigger instances
+    \item algorithm seems to be quite stable
+    \item additional experiments to be done to compare effects of construction heuristic and show stability
+
+
+    \end{itemize}
 
   \end{frame}
 
