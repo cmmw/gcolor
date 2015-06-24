@@ -49,6 +49,7 @@ Problem}
         \begin{itemize}
         \item{Used Benchmarks}
         \item{Results}
+        \item{Visualization of Solutions}
         \end{itemize}
 
     \end{enumerate}
@@ -62,7 +63,7 @@ Problem}
     \item{Variables: Nodes of the graph}
     \item{Domains: Colors \{1 \dots k\}}
     \item{Constraints: $diff(n_1, n_2),  \forall (n_1, n_2) \in E$}
-    \item{Various optimization techniques}
+    \item{Constraint propagation and Variable/Value ordering used}
     \end{itemize}
 
 
@@ -89,10 +90,18 @@ Problem}
 	Variable selection heuristic:
 	\begin{itemize}
 	\item{Minimum Remaining Value [MRV]}
+          \begin{itemize}
+          \item{Variables with the least possible number of values preferred}
+          \item{Ties are broken by Minimum Degree Heuristic}
+          \end{itemize}
 	\end{itemize}
 	Value selection heuristic:
 	\begin{itemize}
 	\item{Least Constrained Value [LCV]}
+          \begin{itemize}
+          \item{Values which eliminate least colors in neighbour domains are preferred}
+          \end{itemize}
+          
 	\end{itemize}
   \end{frame}
 
@@ -165,6 +174,24 @@ myciel6.col & 10800s & 11 & no & 10800s & 11  & no & 10800s & 11 & no \\
         \label{myTable1}
         \end{center}
 \end{table}
+
+\end{frame}
+
+\begin{frame}
+  \frametitle{Visualization of Solutions}
+
+  \begin{itemize}
+    \item graphviz.org: open source graph library for drawing of graphs
+  \end{itemize}
+
+  \begin{figure}
+    \footnotesize
+   \includegraphics[width=0.475\textwidth]{myciel3.png}
+   \hfill
+   \includegraphics[width=0.475\textwidth]{queen5_5.png}
+   \caption{The left side shows the optimal solution for myciel3.col and the right side for queen5\_5.png}
+   \label{figure1}
+\end{figure}
 
 \end{frame}
 
@@ -376,7 +403,14 @@ myciel6.col & 10800s & 11 & no & 10800s & 11  & no & 10800s & 11 & no \\
 
 \begin{frame}
   \frametitle<presentation>{References}    
-  \begin{thebibliography}{2}
+  \begin{thebibliography}{3}
+
+    \beamertemplatebookbibitems
+    \bibitem{ArtModern}
+    Stuart Russel, Peter Norvig.
+    \newblock {\em Artificial Intelligence. A Modern Approach}.
+    \newblock Pearson Education, 2010.
+
     
   \beamertemplatearticlebibitems
   \bibitem{Tabu Search}
@@ -390,6 +424,11 @@ myciel6.col & 10800s & 11 & no & 10800s & 11  & no & 10800s & 11 & no \\
     \newblock 2011
 
 
+\bibitem{graphviz}
+Ellson, John and Gansner, Emden and Koutsofios et al.
+    \newblock Graphviz - open source graph drawing tools
+    \newblock 2002
+    
   \end{thebibliography}
 \end{frame}
 
